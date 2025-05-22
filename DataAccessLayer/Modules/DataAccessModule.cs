@@ -27,6 +27,8 @@ namespace DataAccessLayer.Modules
 
                 return new ApplicationDbContext(optionsBuilder.Options);
             }).AsSelf().InstancePerLifetimeScope();
+
+            builder.RegisterType<DataInitializer>().AsSelf().InstancePerLifetimeScope();
         }
     }
 }

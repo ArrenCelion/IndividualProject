@@ -15,9 +15,9 @@ namespace DataAccessLayer
             _dbContext = dbContext;
         }
 
-        //public void SeedData()
-        //{
-        //    _dbContext.Database.Migrate();
-        //}
+        public void SeedData()
+        {
+            _dbContext.Database.Migrate();
+        }
     }
 }

@@ -20,8 +20,13 @@ namespace TripleProject
         }
         public void Run()
         {
-            using var scope = _container.BeginLifetimeScope();
-            Console.WriteLine("Application is running...");
+            using (var scope = _container.BeginLifetimeScope())
+            {
+                var dataInitializer = scope.Resolve<DataAccessLayer.DataInitializer>();
+                dataInitializer.SeedData();
+            }
+
+                Console.WriteLine("Application is running...");
             // Add your application logic here
         }
     }
