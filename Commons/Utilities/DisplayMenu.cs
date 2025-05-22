@@ -27,7 +27,7 @@ namespace Common.Utilities
         public string Run()
         {
             Console.Clear();
-            var font = FigletFont.Load("../Assets/Electronic.flf");
+            var font = FigletFont.Load("../../../../Commons/Assets/Electronic.flf");
 
             AnsiConsole.Write(
                 new FigletText(font, Title)

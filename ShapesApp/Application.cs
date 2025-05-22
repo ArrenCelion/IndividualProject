@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TripleProject
+namespace ShapesApp
 {
     public class Application
     {
@@ -25,8 +25,8 @@ namespace TripleProject
                 var dataInitializer = scope.Resolve<DataAccessLayer.DataInitializer>();
                 dataInitializer.SeedData();
 
-                var controller = scope.Resolve<MainMenuController>();
-                controller.Run();
+                var controller = scope.Resolve<ShapesMenuController>();
+                controller.RunShapesMenu();
             }
         }
     }

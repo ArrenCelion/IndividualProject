@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TripleProject
+namespace ShapesApp
 {
     public static class ContainerConfig
     {
@@ -20,7 +20,7 @@ namespace TripleProject
             builder.RegisterModule(new CommonModule());
            //builder.RegisterModule(new ServicesModule());
             builder.RegisterModule(new DataAccessModule(configuration));
-            builder.RegisterType<MainMenuController>().AsSelf();
+            builder.RegisterType<ShapesMenuController>().AsSelf();
 
             return builder.Build();
         }

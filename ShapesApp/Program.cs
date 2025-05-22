@@ -1,10 +1,17 @@
-﻿namespace ShapesApp
+﻿using Microsoft.Extensions.Configuration;
+
+namespace ShapesApp
 {
     internal class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            Console.WriteLine("Hello, World!");
+            var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: true)
+            .Build();
+
+            var app = new Application(configuration);
+            app.Run();
         }
     }
 }

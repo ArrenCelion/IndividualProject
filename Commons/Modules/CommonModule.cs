@@ -1,4 +1,7 @@
 ﻿using Autofac;
+using Common.Interfaces;
+using Common.Utilities;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +14,10 @@ namespace Commons.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            //builder.RegisterType<DisplayMenu>()
-            //       .As<IDisplayMenu>()
-            //       .SingleInstance();
+            builder.RegisterType<DisplayMenu>().As<IDisplayMenu>().SingleInstance();
+
+            builder.RegisterType<MenuService>().As<IMenuService>().SingleInstance();
+
         }
     }
 }

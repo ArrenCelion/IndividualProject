@@ -15,7 +15,7 @@ namespace Services
         public DisplayMenu CreateMainMenu()
         {
             string title = "Welcome";
-            string[] options = { "Shapes", "Calculator", "Rock, Paper, Scissors", "Exit" };
+            string[] options = { "Shapes", "Calculator", "Rock, Paper, Scissor", "Exit" };
             string prompt = "Welcome to the Triple Project!";
             return new DisplayMenu(title, prompt, options);
         }
