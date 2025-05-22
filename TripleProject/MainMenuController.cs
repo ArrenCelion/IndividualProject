@@ -1,4 +1,4 @@
-﻿using Common.Interfaces;
+﻿using Commons.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -77,24 +77,5 @@ namespace TripleProject
             }
 
         }
-
-        //private void StartApp(string projectPath)
-        //{
-        //    var startInfo = new ProcessStartInfo
-        //    {
-        //        FileName = "dotnet",
-        //        Arguments = $"run --project {projectPath}",
-        //        UseShellExecute = false
-        //    };
-
-        //    try
-        //    {
-        //        Process.Start(startInfo);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Failed to start project at '{projectPath}': {ex.Message}");
-        //    }
-        //}
     }
 }

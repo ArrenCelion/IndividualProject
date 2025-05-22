@@ -5,10 +5,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Common.Interfaces;
-using Common.Utilities;
+using Commons.Interfaces;
 
-namespace Services
+namespace Commons.Utilities
 {
     public class MenuService : IMenuService 
     {
@@ -20,10 +19,18 @@ namespace Services
             return new DisplayMenu(title, prompt, options);
         }
 
-        public DisplayMenu CreateShapesMenu()
+        public DisplayMenu SelectShapesMenu()
         {
             string title = "Shapes";
             string[] options = { "Rectangle", "Parallelogram", "Rhombus", "Triangle", "Back" };
+            string prompt = "Choose a shape to calculate";
+            return new DisplayMenu(title, prompt, options);
+        }
+
+        public DisplayMenu CrudShapesMenu(string input)
+        {
+            string title = input;
+            string[] options = { "Calculate Shape", "Read One", "Read all", "Update", "Delete", "Back" };
             string prompt = "Choose a shape to calculate";
             return new DisplayMenu(title, prompt, options);
         }

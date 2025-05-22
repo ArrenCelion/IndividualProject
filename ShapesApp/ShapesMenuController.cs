@@ -1,4 +1,4 @@
-﻿using Common.Interfaces;
+﻿using Commons.Interfaces;
 using Commons;
 using System;
 using System.Collections.Generic;
@@ -21,14 +21,53 @@ namespace ShapesApp
         {
             while (true)
             {
-                var menu = _menuService.CreateShapesMenu();
-                var choice = menu.Run();
+                var menu = _menuService.SelectShapesMenu();
+                var input = menu.Run();
 
-                switch (choice)
+                
+
+                switch (input)
                 {
                     case "Rectangle":
-                        Console.WriteLine("Rectangle selected");
-                        Console.ReadLine();
+                        RunShapesCrudMenu(input);
+                        break;
+                    case "Parallelogram":
+                        RunShapesCrudMenu(input);
+                        break;
+                    case "Rhombus":
+                        RunShapesCrudMenu(input);
+                        break;
+                    case "Triangle":
+                        RunShapesCrudMenu(input);
+                        break;
+                    case "Back":
+                        return;
+                }
+            }
+        }
+
+        public void RunShapesCrudMenu(string input)
+        {
+            while (true)
+            {
+                var menu = _menuService.CrudShapesMenu(input);
+                var choice = menu.Run();
+                switch (choice)
+                {
+                    case "Calculate Shape":
+                        // Call the method to calculate the shape
+                        break;
+                    case "Read One":
+                        // Call the method to read one shape
+                        break;
+                    case "Read all":
+                        // Call the method to read all shapes
+                        break;
+                    case "Update":
+                        // Call the method to update a shape
+                        break;
+                    case "Delete":
+                        // Call the method to delete a shape
                         break;
                     case "Back":
                         return;

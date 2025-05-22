@@ -1,7 +1,6 @@
 ﻿using Autofac;
-using Common.Interfaces;
-using Common.Utilities;
-using Services;
+using Commons.Interfaces;
+using Commons.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

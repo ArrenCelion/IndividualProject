@@ -1,15 +1,16 @@
-﻿using Common.Utilities;
+﻿using Commons.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Interfaces
+namespace Commons.Interfaces
 {
     public interface IMenuService
     {
         DisplayMenu CreateMainMenu();
-        DisplayMenu CreateShapesMenu();
+        DisplayMenu CrudShapesMenu(string input);
+        DisplayMenu SelectShapesMenu();
     }
 }

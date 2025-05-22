@@ -1,4 +1,4 @@
-﻿namespace Common.Utilities
+﻿namespace Commons.Utilities
 {
     public interface IDisplayMenu
     {
