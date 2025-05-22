@@ -32,7 +32,7 @@ namespace DataAccessLayer
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=.;Database=TrippleProject;Trusted_Connection=True;TrustServerCertificate=true;");
+                optionsBuilder.UseSqlServer(@"Server=.;Database=TripleProject;Trusted_Connection=True;TrustServerCertificate=true;");
             } 
         }
 
