@@ -4,7 +4,9 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            // Create an instance of the Application class and call the Run method
+            var app = new Application();
+            app.Run();
         }
     }
 }
