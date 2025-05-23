@@ -1,5 +1,6 @@
 ﻿using Commons.Interfaces;
 using Commons;
+using Services.Shapes.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace ShapesApp
     public class ShapesMenuController
     {
         private readonly IMenuService _menuService;
+        private readonly IShapeService _shapeService;
 
-        public ShapesMenuController(IMenuService menuService)
+        public ShapesMenuController(IMenuService menuService, IShapeService shapeService)
         {
             _menuService = menuService;
+            _shapeService = shapeService;
         }
 
         public void RunShapesMenu()
@@ -29,14 +32,8 @@ namespace ShapesApp
                 switch (input)
                 {
                     case "Rectangle":
-                        RunShapesCrudMenu(input);
-                        break;
                     case "Parallelogram":
-                        RunShapesCrudMenu(input);
-                        break;
                     case "Rhombus":
-                        RunShapesCrudMenu(input);
-                        break;
                     case "Triangle":
                         RunShapesCrudMenu(input);
                         break;
@@ -55,7 +52,7 @@ namespace ShapesApp
                 switch (choice)
                 {
                     case "Calculate Shape":
-                        // Call the method to calculate the shape
+                         _shapeService.CalculateShape(input);
                         break;
                     case "Read One":
                         // Call the method to read one shape
