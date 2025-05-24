@@ -38,15 +38,12 @@ namespace Services.Shapes
                     CalculateRectangle();
                     break;
                 case "Parallelogram":
-                    CalculateParallelogram();
-                    break;
                 case "Rhombus":
-                    // Call the method to calculate and save rhombus
+                    CalculateParallelogram();
                     break;
                 case "Triangle":
                     CalculateTriangle();
                     break;
-                // Add cases for other shapes as needed
                 default:
                     throw new NotImplementedException($"Shape '{input}' is not implemented.");
             }
@@ -56,11 +53,9 @@ namespace Services.Shapes
         {
             var dto = _inputReader.GetRectangleInput();
 
-            // Calculate area and circumference (perimeter)
             var area = (decimal)_rectangleStrategy.CalculateArea(dto);
             var circumference = (decimal)_rectangleStrategy.CalculateCircumference(dto);
 
-            // Build the model to save
             var rectangleModel = new RectangleModel
             {
                 Base = dto.Base,
@@ -70,10 +65,8 @@ namespace Services.Shapes
                 DateOfCalculation = DateOnly.FromDateTime(DateTime.Now)
             };
 
-            // Save to DB
             SaveRectangle(rectangleModel);
 
-            // DisplayResult results
             DisplayResult.DisplayRectangle("Rectangle", rectangleModel);
         }
 
@@ -119,8 +112,12 @@ namespace Services.Shapes
             };
 
             SaveParallelogram(parallelogramModel);
-
-            DisplayResult.DisplayParallelogram("Parallelogram", parallelogramModel);
+            if (isRhombus)
+            {
+                DisplayResult.DisplayParallelogram("Rhombus", parallelogramModel);
+            }
+            else
+                DisplayResult.DisplayParallelogram("Parallelogram", parallelogramModel);
         }
 
         public void SaveRectangle(RectangleModel rectangleModel)

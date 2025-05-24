@@ -21,6 +21,7 @@ namespace Services.Modules
             builder.RegisterType<RectangleStrategy>().AsSelf();
             builder.RegisterType<TriangleStrategy>().AsSelf();
             builder.RegisterType<ParallelogramStrategy>().AsSelf();
+            builder.RegisterType<RhombusStrategy>().AsSelf();
             builder.RegisterType<ApplicationDbContext>().AsSelf();
         }
     }
