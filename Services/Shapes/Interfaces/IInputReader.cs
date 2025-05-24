@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Services.Shapes.Interfaces
 {
-    public interface IRectangleInputReader
+    public interface IInputReader
     {
-        RectangleDTO GetInput();
+        RectangleDTO GetRectangleInput();
+        TriangleDTO GetTriangleInput();
     }
 }

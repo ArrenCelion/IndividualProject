@@ -13,15 +13,17 @@ namespace Services.Shapes
 {
     public class ShapeService : IShapeService
     {
-        private readonly IRectangleInputReader _rectangleInputReader;
+        private readonly IInputReader _inputReader;
         private readonly RectangleStrategy _rectangleStrategy;
+        private readonly TriangleStrategy _triangleStrategy;
         private readonly ApplicationDbContext _dbContext;
 
-        public ShapeService(IRectangleInputReader rectangleInputReader, RectangleStrategy rectangleStrategy, ApplicationDbContext dbContext)
+        public ShapeService(IInputReader inputReader, RectangleStrategy rectangleStrategy, ApplicationDbContext dbContext, TriangleStrategy triangleStrategy)
         {
-            _rectangleInputReader = rectangleInputReader;
+            _inputReader = inputReader;
             _rectangleStrategy = rectangleStrategy;
             _dbContext = dbContext;
+            _triangleStrategy = triangleStrategy;
         }
 
         public IDisplayResult DisplayResult { get; set; }
@@ -31,7 +33,16 @@ namespace Services.Shapes
             switch (input)
             {
                 case "Rectangle":
-                    CalculateAndSaveRectangle();
+                    CalculateRectangle();
+                    break;
+                case "Parallelogram":
+                    // Call the method to calculate and save parallelogram
+                    break;
+                case "Rhombus":
+                    // Call the method to calculate and save rhombus
+                    break;
+                case "Triangle":
+                    CalculateTriangle();
                     break;
                 // Add cases for other shapes as needed
                 default:
@@ -39,13 +50,13 @@ namespace Services.Shapes
             }
         }
 
-        public void CalculateAndSaveRectangle()
+        public void CalculateRectangle()
         {
-            var dto = _rectangleInputReader.GetInput();
+            var dto = _inputReader.GetRectangleInput();
 
             // Calculate area and circumference (perimeter)
             var area = (decimal)_rectangleStrategy.CalculateArea(dto);
-            var circumference = (decimal)_rectangleStrategy.CalculatePerimeter(dto);
+            var circumference = (decimal)_rectangleStrategy.CalculateCircumference(dto);
 
             // Build the model to save
             var rectangleModel = new RectangleModel
@@ -64,9 +75,38 @@ namespace Services.Shapes
             DisplayResult.DisplayRectangle("Rectangle", rectangleModel);
         }
 
+        public void CalculateTriangle()
+        {
+            var dto = _inputReader.GetTriangleInput();
+            var area = (decimal)_triangleStrategy.CalculateArea(dto);
+            var circumference = (decimal)_triangleStrategy.CalculateCircumference(dto);
+
+            var triangleModel = new Triangle
+            {
+                Base = dto.Base,
+                Height = dto.Height,
+                SideA = dto.SideA,
+                SideB = dto.SideB,
+                SideC = dto.SideC,
+                Area = area,
+                Circumference = circumference,
+                DateOfCalculation = DateOnly.FromDateTime(DateTime.Now)
+            };
+
+            SaveTriangle(triangleModel);
+
+            DisplayResult.DisplayTriangle("Triangle", triangleModel);
+        }
+
         public void SaveRectangle(RectangleModel rectangleModel)
         {
             _dbContext.RectangleModels.Add(rectangleModel);
+            _dbContext.SaveChanges();
+        }
+
+        public void SaveTriangle(Triangle triangleModel)
+        {
+            _dbContext.Triangles.Add(triangleModel);
             _dbContext.SaveChanges();
         }
     }

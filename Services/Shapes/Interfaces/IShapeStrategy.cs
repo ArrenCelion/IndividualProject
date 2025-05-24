@@ -11,6 +11,6 @@ namespace Services.Shapes.Interfaces
         string ShapeName { get; }
 
         double CalculateArea(TParams parameters);
-        double CalculatePerimeter(TParams parameters);
+        double CalculateCircumference(TParams parameters);
     }
 }

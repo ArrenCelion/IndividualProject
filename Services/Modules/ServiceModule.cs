@@ -17,8 +17,9 @@ namespace Services.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ShapeService>().As<IShapeService>().SingleInstance().PropertiesAutowired();
-            builder.RegisterType<RectangleInputReader>().As<IRectangleInputReader>();
+            builder.RegisterType<InputReader>().As<IInputReader>();
             builder.RegisterType<RectangleStrategy>().AsSelf();
+            builder.RegisterType<TriangleStrategy>().AsSelf();
             builder.RegisterType<ApplicationDbContext>().AsSelf();
         }
     }

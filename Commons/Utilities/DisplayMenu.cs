@@ -28,6 +28,7 @@ namespace Commons.Utilities
         {
             Console.Clear();
             var font = FigletFont.Load("../../../../Commons/Assets/Electronic.flf");
+            var highlightStyle = new Style().Foreground(Color.Fuchsia);
 
             AnsiConsole.Write(
                 new FigletText(font, Title)
@@ -38,8 +39,9 @@ namespace Commons.Utilities
 
             var input = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title("[deeppink4_1]Select an option:[/]")
+                    .Title("[Fuchsia]Select an option:[/]")
                     .PageSize(10)
+                    .HighlightStyle(highlightStyle)
                     .AddChoices(Options));
 
             return input;

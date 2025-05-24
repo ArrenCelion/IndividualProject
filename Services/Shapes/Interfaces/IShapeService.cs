@@ -10,6 +10,10 @@ namespace Services.Shapes.Interfaces
     public interface IShapeService
     {
         void CalculateShape(string input);
+        void CalculateRectangle();
+        void CalculateTriangle();
+
         void SaveRectangle(RectangleModel rectangleModel);
+        void SaveTriangle(Triangle triangleModel);
     }
 }

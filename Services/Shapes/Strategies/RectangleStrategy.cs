@@ -15,7 +15,7 @@ namespace Services.Shapes.Strategies
         public double CalculateArea(RectangleDTO dto) =>
             (double)(dto.Base * dto.Height);
 
-        public double CalculatePerimeter(RectangleDTO dto) =>
+        public double CalculateCircumference(RectangleDTO dto) =>
             2 * (double)(dto.Base + dto.Height);
     }
 }

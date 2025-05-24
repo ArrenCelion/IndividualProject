@@ -10,5 +10,6 @@ namespace Services.Shapes.Interfaces
     public interface IDisplayResult
     {
         void DisplayRectangle(string shapeName, RectangleModel model);
+        void DisplayTriangle(string shapeName, Triangle model);
     }
 }
