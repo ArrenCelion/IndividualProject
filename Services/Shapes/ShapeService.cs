@@ -16,14 +16,16 @@ namespace Services.Shapes
         private readonly IInputReader _inputReader;
         private readonly RectangleStrategy _rectangleStrategy;
         private readonly TriangleStrategy _triangleStrategy;
+        private readonly ParallelogramStrategy _parallelogramStrategy; // Assuming you have a strategy for parallelogram
         private readonly ApplicationDbContext _dbContext;
 
-        public ShapeService(IInputReader inputReader, RectangleStrategy rectangleStrategy, ApplicationDbContext dbContext, TriangleStrategy triangleStrategy)
+        public ShapeService(IInputReader inputReader, RectangleStrategy rectangleStrategy, ApplicationDbContext dbContext, TriangleStrategy triangleStrategy, ParallelogramStrategy parallelogramStrategy)
         {
             _inputReader = inputReader;
             _rectangleStrategy = rectangleStrategy;
             _dbContext = dbContext;
             _triangleStrategy = triangleStrategy;
+            _parallelogramStrategy = parallelogramStrategy;
         }
 
         public IDisplayResult DisplayResult { get; set; }
@@ -36,7 +38,7 @@ namespace Services.Shapes
                     CalculateRectangle();
                     break;
                 case "Parallelogram":
-                    // Call the method to calculate and save parallelogram
+                    CalculateParallelogram();
                     break;
                 case "Rhombus":
                     // Call the method to calculate and save rhombus
@@ -98,6 +100,29 @@ namespace Services.Shapes
             DisplayResult.DisplayTriangle("Triangle", triangleModel);
         }
 
+        public void CalculateParallelogram()
+        {
+            var dto = _inputReader.GetParallelogramInput();
+            var area = (decimal)_parallelogramStrategy.CalculateArea(dto);
+            var circumference = (decimal)_parallelogramStrategy.CalculateCircumference(dto);
+            bool isRhombus = dto.Base == dto.Side;
+
+            var parallelogramModel = new Parallelogram
+            {
+                Base = dto.Base,
+                Height = dto.Height,
+                Side = dto.Side,
+                Area = area,
+                Circumference = circumference,
+                DateOfCalculation = DateOnly.FromDateTime(DateTime.Now),
+                IsRhombus = isRhombus
+            };
+
+            SaveParallelogram(parallelogramModel);
+
+            DisplayResult.DisplayParallelogram("Parallelogram", parallelogramModel);
+        }
+
         public void SaveRectangle(RectangleModel rectangleModel)
         {
             _dbContext.RectangleModels.Add(rectangleModel);
@@ -107,6 +132,12 @@ namespace Services.Shapes
         public void SaveTriangle(Triangle triangleModel)
         {
             _dbContext.Triangles.Add(triangleModel);
+            _dbContext.SaveChanges();
+        }
+
+        public void SaveParallelogram(Parallelogram parallelogramModel)
+        {
+            _dbContext.Parallelograms.Add(parallelogramModel);
             _dbContext.SaveChanges();
         }
     }

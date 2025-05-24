@@ -20,6 +20,7 @@ namespace Services.Modules
             builder.RegisterType<InputReader>().As<IInputReader>();
             builder.RegisterType<RectangleStrategy>().AsSelf();
             builder.RegisterType<TriangleStrategy>().AsSelf();
+            builder.RegisterType<ParallelogramStrategy>().AsSelf();
             builder.RegisterType<ApplicationDbContext>().AsSelf();
         }
     }

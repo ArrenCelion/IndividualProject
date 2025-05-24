@@ -12,6 +12,8 @@ namespace Services.Shapes.Interfaces
         void CalculateShape(string input);
         void CalculateRectangle();
         void CalculateTriangle();
+        void CalculateParallelogram();
+        void SaveParallelogram(Parallelogram parallelogramModel);
 
         void SaveRectangle(RectangleModel rectangleModel);
         void SaveTriangle(Triangle triangleModel);

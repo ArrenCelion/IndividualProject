@@ -36,6 +36,35 @@ namespace Services.Shapes.UI
             };
         }
 
+        public ParallelogramDTO GetParallelogramInput()
+        {
+            AnsiConsole.MarkupLine("[bold yellow]Enter values for Parallelogram/Rhombus:[/]");
+            double baseLength = AnsiConsole.Prompt(
+                new TextPrompt<double>("Enter [green]base length[/]:")
+                    .PromptStyle("cyan")
+                    .ValidationErrorMessage("[red]That's not a valid number[/]")
+                    .Validate(b => b > 0 ? ValidationResult.Success() : ValidationResult.Error("[red]Base length must be greater than 0[/]"))
+            );
+            double height = AnsiConsole.Prompt(
+                new TextPrompt<double>("Enter [green]height[/]:")
+                    .PromptStyle("cyan")
+                    .ValidationErrorMessage("[red]That's not a valid number[/]")
+                    .Validate(h => h > 0 ? ValidationResult.Success() : ValidationResult.Error("[red]Height must be greater than 0[/]"))
+            );
+            double side = AnsiConsole.Prompt(
+                new TextPrompt<double>("Enter [green]side length[/]:")
+                    .PromptStyle("cyan")
+                    .ValidationErrorMessage("[red]That's not a valid number[/]")
+                    .Validate(s => s > 0 ? ValidationResult.Success() : ValidationResult.Error("[red]Side length must be greater than 0[/]"))
+            );
+            return new ParallelogramDTO
+            {
+                Base = (decimal)baseLength,
+                Height = (decimal)height,
+                Side = (decimal)side
+            };
+        }
+
         public TriangleDTO GetTriangleInput()
         {
             AnsiConsole.MarkupLine("[bold yellow]Enter values for Triangle:[/]");

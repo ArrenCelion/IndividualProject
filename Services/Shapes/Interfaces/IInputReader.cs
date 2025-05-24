@@ -11,5 +11,6 @@ namespace Services.Shapes.Interfaces
     {
         RectangleDTO GetRectangleInput();
         TriangleDTO GetTriangleInput();
+        ParallelogramDTO GetParallelogramInput();
     }
 }

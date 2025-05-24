@@ -11,5 +11,6 @@ namespace Services.Shapes.Interfaces
     {
         void DisplayRectangle(string shapeName, RectangleModel model);
         void DisplayTriangle(string shapeName, Triangle model);
+        void DisplayParallelogram(string shapeName, Parallelogram model);
     }
 }
