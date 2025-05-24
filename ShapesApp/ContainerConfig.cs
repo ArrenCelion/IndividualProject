@@ -4,7 +4,6 @@ using DataAccessLayer.Modules;
 using Microsoft.Extensions.Configuration;
 using Services.Modules;
 using Services.Shapes.Interfaces;
-using ShapesApp.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +23,6 @@ namespace ShapesApp
             builder.RegisterModule(new ServiceModule());
             builder.RegisterModule(new DataAccessModule(configuration));
             builder.RegisterType<ShapesMenuController>().AsSelf();
-            builder.RegisterType<DisplayResult>().As<IDisplayResult>().SingleInstance();
 
             return builder.Build();
         }

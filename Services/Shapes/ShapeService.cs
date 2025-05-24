@@ -11,12 +11,13 @@ using System.Threading.Tasks;
 
 namespace Services.Shapes
 {
+    //TODO: Add CalculationService to handle calculations separately
     public class ShapeService : IShapeService
     {
         private readonly IInputReader _inputReader;
         private readonly RectangleStrategy _rectangleStrategy;
         private readonly TriangleStrategy _triangleStrategy;
-        private readonly ParallelogramStrategy _parallelogramStrategy; // Assuming you have a strategy for parallelogram
+        private readonly ParallelogramStrategy _parallelogramStrategy;
         private readonly ApplicationDbContext _dbContext;
 
         public ShapeService(IInputReader inputReader, RectangleStrategy rectangleStrategy, ApplicationDbContext dbContext, TriangleStrategy triangleStrategy, ParallelogramStrategy parallelogramStrategy)
@@ -137,5 +138,99 @@ namespace Services.Shapes
             _dbContext.Parallelograms.Add(parallelogramModel);
             _dbContext.SaveChanges();
         }
+
+        /* READ */
+
+        public List<string> ReadAllShapes()
+        {
+
+            var rectangles = ReadAllRectangles();
+            var triangles = ReadAllTriangles();
+            var parallelograms = ReadAllParallelograms("parallelograms");
+            var rhombuses = ReadAllParallelograms("rhombus");
+
+            var allShapes = new List<string>();
+            allShapes.AddRange(rectangles);
+            allShapes.AddRange(triangles);
+            allShapes.AddRange(parallelograms);
+            allShapes.AddRange(rhombuses);
+
+            return allShapes;
+        }
+
+        public List<string> ReadAllRectangles()
+        {
+            var rectangles = _dbContext.RectangleModels
+                  .Select(r => new
+                  {
+                      Shape = "Rectangle",
+                      Base = r.Base.ToString(),
+                      Height = r.Height.ToString(),
+                      Area = r.Area.ToString(),
+                      Circumference = r.Circumference.ToString(),
+                      Date = r.DateOfCalculation.ToString()
+                  });
+
+            return rectangles.Select(r =>
+                $"{r.Shape}, Base: {r.Base}, Height: {r.Height}, Area: {r.Area}, Circumference: {r.Circumference}, Date: {r.Date}"
+            ).ToList();
+        }
+        public List<string> ReadAllTriangles()
+        {
+            var triangles = _dbContext.Triangles
+                  .Select(t => new
+                  {
+                      Shape = "Triangle",
+                      Base = t.Base.ToString(),
+                      Height = t.Height.ToString(),
+                      Area = t.Area.ToString(),
+                      Circumference = t.Circumference.ToString(),
+                      Date = t.DateOfCalculation.ToString()
+                  });
+
+            return triangles.Select(t =>
+                $"{t.Shape}, Base: {t.Base}, Height: {t.Height}, Area: {t.Area}, Circumference: {t.Circumference}, Date: {t.Date}"
+            ).ToList();
+        }
+        public List<string> ReadAllParallelograms(string type)
+        {
+            if (type == "rhombus")
+            {
+                var rhombuses = _dbContext.Parallelograms
+                    .Where(p => p.IsRhombus)
+                    .Select(p => new
+                    {
+                        Shape = "Rhombus",
+                        Base = p.Base.ToString(),
+                        Height = p.Height.ToString(),
+                        Area = p.Area.ToString(),
+                        Circumference = p.Circumference.ToString(),
+                        Date = p.DateOfCalculation.ToString()
+                    });
+
+                return rhombuses.Select(r =>
+                    $"{r.Shape}, Base: {r.Base}, Height: {r.Height}, Area: {r.Area}, Circumference: {r.Circumference}, Date: {r.Date}"
+                ).ToList();
+            }
+            else
+            {
+                var parallelograms = _dbContext.Parallelograms
+                    .Where(p => !p.IsRhombus)
+                    .Select(p => new
+                    {
+                        Shape = "Parallelogram",
+                        Base = p.Base.ToString(),
+                        Height = p.Height.ToString(),
+                        Area = p.Area.ToString(),
+                        Circumference = p.Circumference.ToString(),
+                        Date = p.DateOfCalculation.ToString()
+                    });
+
+                return parallelograms.Select(p =>
+                    $"{p.Shape}, Base: {p.Base}, Height: {p.Height}, Area: {p.Area}, Circumference: {p.Circumference}, Date: {p.Date}"
+                ).ToList();
+            }
+        }
+
     }
 }

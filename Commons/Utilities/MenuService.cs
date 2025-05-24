@@ -22,16 +22,16 @@ namespace Commons.Utilities
         public DisplayMenu SelectShapesMenu()
         {
             string title = "Shapes";
-            string[] options = { "Rectangle", "Parallelogram", "Rhombus", "Triangle", "Back" };
-            string prompt = "Choose a shape to calculate";
+            string[] options = { "Rectangle", "Parallelogram", "Rhombus", "Triangle", "Read all Shapes", "Back" };
+            string prompt = "Choose a shape to calculate or read all shapes";
             return new DisplayMenu(title, prompt, options);
         }
 
         public DisplayMenu CrudShapesMenu(string input)
         {
             string title = input;
-            string[] options = { "Calculate Shape", "Read One", "Read all", "Update", "Delete", "Back" };
-            string prompt = "Choose a shape to calculate";
+            string[] options = { "Calculate Shape", "Read all", "Update", "Delete", "Back" };
+            string prompt = $"Calculate Shape or CRUD {input}";
             return new DisplayMenu(title, prompt, options);
         }
     }

@@ -18,6 +18,10 @@ namespace Commons.Utilities
 
         public DisplayMenu(string title, string prompt, string[] options)
         {
+            if (title == "Rock, Paper, Scissor")
+            {
+                title = "RPS";
+            }
             Title = title;
             Prompt = prompt;
             Options = options;
@@ -26,10 +30,21 @@ namespace Commons.Utilities
 
         public string Run()
         {
+            string fontPath;
             Console.Clear();
-            var font = FigletFont.Load("../../../../Commons/Assets/Electronic.flf");
+            if (Title == "Welcome" || Title == "Shapes" || Title == "Calculator" || Title == "RPS")
+            {
+                fontPath = "../../../../Commons/Assets/Electronic.flf";
+            }
+            else
+            {
+                fontPath = "../../../../Commons/Assets/ANSI Regular.flf";
+            }
+
+            var font = FigletFont.Load(fontPath);
             var highlightStyle = new Style().Foreground(Color.Fuchsia);
 
+            
             AnsiConsole.Write(
                 new FigletText(font, Title)
                 .Centered()

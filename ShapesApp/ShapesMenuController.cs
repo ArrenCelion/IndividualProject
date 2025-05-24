@@ -13,11 +13,13 @@ namespace ShapesApp
     {
         private readonly IMenuService _menuService;
         private readonly IShapeService _shapeService;
+        private readonly IDisplayCRUD _displayCRUD;
 
-        public ShapesMenuController(IMenuService menuService, IShapeService shapeService)
+        public ShapesMenuController(IMenuService menuService, IShapeService shapeService, IDisplayCRUD displayCRUD)
         {
             _menuService = menuService;
             _shapeService = shapeService;
+            _displayCRUD = displayCRUD;
         }
 
         public void RunShapesMenu()
@@ -37,6 +39,9 @@ namespace ShapesApp
                     case "Triangle":
                         RunShapesCrudMenu(input);
                         break;
+                    case "Read all Shapes":
+                        _displayCRUD.DisplayReadShapes("All Shapes");
+                        break;
                     case "Back":
                         return;
                 }
@@ -54,11 +59,8 @@ namespace ShapesApp
                     case "Calculate Shape":
                          _shapeService.CalculateShape(input);
                         break;
-                    case "Read One":
-                        // Call the method to read one shape
-                        break;
                     case "Read all":
-                        // Call the method to read all shapes
+                        _displayCRUD.DisplayReadShapes(input);
                         break;
                     case "Update":
                         // Call the method to update a shape

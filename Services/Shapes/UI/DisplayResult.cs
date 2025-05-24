@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShapesApp.UI
+namespace Services.Shapes.UI
 {
     public class DisplayResult : IDisplayResult
 

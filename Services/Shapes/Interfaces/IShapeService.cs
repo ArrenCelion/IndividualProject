@@ -17,5 +17,10 @@ namespace Services.Shapes.Interfaces
 
         void SaveRectangle(RectangleModel rectangleModel);
         void SaveTriangle(Triangle triangleModel);
+        // ReadOneShape(string shapeName, int id);
+        List<string> ReadAllRectangles();
+        List<string> ReadAllTriangles();
+        List<string> ReadAllParallelograms(string shapeType);
+        List<string> ReadAllShapes();
     }
 }
