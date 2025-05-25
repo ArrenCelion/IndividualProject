@@ -43,8 +43,6 @@ namespace Services.Shapes.UI
             AnsiConsole.Write(table);
 
             AnsiConsole.MarkupLine("[green]Calculation completed successfully and " + model.ShapeName + " saved![/]");
-            AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
-            Console.ReadKey(true);
         }
     }
 }

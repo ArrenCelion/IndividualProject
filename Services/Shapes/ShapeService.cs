@@ -37,6 +37,7 @@ namespace Services.Shapes
 
         public void CalculateShape(string input)
         {
+            Console.Clear();
             switch (input)
             {
                 case "Rectangle":
@@ -76,6 +77,19 @@ namespace Services.Shapes
             SaveShape(rectangleModel, false);
 
             DisplayResult.DisplayShape(rectangleModel);
+
+            AnsiConsole.MarkupLine("[yellow]Would you like to make another rectangle calculation?[/] (y/n)");
+            var anotherCalculation = AnsiConsole.Prompt(new TextPrompt<string>("Press [green]y[/] to continue or [red]n[/] to exit:")
+                .AllowEmpty().Validate(input => input.ToLower() == "y" || input.ToLower() == "n" ? ValidationResult.Success() : ValidationResult.Error("[red]Invalid input, please enter 'y' or 'n'.[/]")));
+            if (anotherCalculation.ToLower() == "y")
+            {
+                CalculateShape("Rectangle");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
+                Console.ReadKey(true);
+            }
         }
 
         public void CalculateTriangle()
@@ -100,6 +114,19 @@ namespace Services.Shapes
             SaveShape(triangleModel, false);
 
             DisplayResult.DisplayShape(triangleModel);
+
+            AnsiConsole.MarkupLine("[yellow]Would you like to make another triangle calculation?[/] (y/n)");
+            var anotherCalculation = AnsiConsole.Prompt(new TextPrompt<string>("Press [green]y[/] to continue or [red]n[/] to exit:")
+                .AllowEmpty().Validate(input => input.ToLower() == "y" || input.ToLower() == "n" ? ValidationResult.Success() : ValidationResult.Error("[red]Invalid input, please enter 'y' or 'n'.[/]")));
+            if (anotherCalculation.ToLower() == "y")
+            {
+                CalculateShape("Triangle");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
+                Console.ReadKey(true);
+            }
         }
 
 
@@ -129,10 +156,23 @@ namespace Services.Shapes
             {
                 parallelogramModel.ShapeName = "Parallelogram";
             }
-      
+
             SaveShape(parallelogramModel, false);
 
             DisplayResult.DisplayShape(parallelogramModel);
+
+            AnsiConsole.MarkupLine($"[yellow]Would you like to make another {parallelogramModel.ShapeName} calculation?[/] (y/n)");
+            var anotherCalculation = AnsiConsole.Prompt(new TextPrompt<string>("Press [green]y[/] to continue or [red]n[/] to exit:")
+                .AllowEmpty().Validate(input => input.ToLower() == "y" || input.ToLower() == "n" ? ValidationResult.Success() : ValidationResult.Error("[red]Invalid input, please enter 'y' or 'n'.[/]")));
+            if (anotherCalculation.ToLower() == "y")
+            {
+                CalculateShape(isRhombus ? "Rhombus" : "Parallelogram");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
+                Console.ReadKey(true);
+            }
         }
 
         public void SaveShape(ShapesModel shapesModel, bool isUpdate)
@@ -172,8 +212,8 @@ namespace Services.Shapes
         public List<ShapesModel> ReadAllShapes()
         {
 
-           var allShapes = _dbContext.ShapesModels.ToList();
-           return allShapes;
+            var allShapes = _dbContext.ShapesModels.ToList();
+            return allShapes;
         }
 
         public List<ShapesModel> ReadAllSpecificShape(string shape)
@@ -215,7 +255,7 @@ namespace Services.Shapes
             AnsiConsole.MarkupLine($"[yellow]Are you sure you want to delete the shape '{selectedShape.ShapeName}' with ID {selectedShape.ShapesModelId}? (y/n)[/]");
             var confirmation = AnsiConsole.Prompt(new TextPrompt<string>("Press [green]y[/] to confirm or [red]n[/] to cancel:")
                 .AllowEmpty().Validate(input => input.ToLower() == "y" || input.ToLower() == "n" ? ValidationResult.Success() : ValidationResult.Error("[red]Invalid input, please enter 'y' or 'n'.[/]")));
-            
+
             if (confirmation.ToLower() != "y")
             {
                 AnsiConsole.MarkupLine("[red]Shape deletion cancelled.[/]");
