@@ -63,7 +63,7 @@ namespace ShapesApp
                         _shapeService.ReadWhatShapes(input);
                         break;
                     case "Update":
-                        // Call the method to update a shape
+                        _shapeService.UpdateShape(input);
                         break;
                     case "Delete":
                         // Call the method to delete a shape

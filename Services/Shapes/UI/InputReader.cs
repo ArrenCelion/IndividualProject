@@ -36,9 +36,9 @@ namespace Services.Shapes.UI
             };
         }
 
-        public ParallelogramDTO GetParallelogramInput()
+        public ParallelogramDTO GetParallelogramInput(string shape)
         {
-            AnsiConsole.MarkupLine("[bold yellow]Enter values for Parallelogram/Rhombus:[/]");
+            AnsiConsole.MarkupLine($"[bold yellow]Enter values for {shape}:[/]");
             double baseLength = AnsiConsole.Prompt(
                 new TextPrompt<double>("Enter [green]base length[/]:")
                     .PromptStyle("cyan")

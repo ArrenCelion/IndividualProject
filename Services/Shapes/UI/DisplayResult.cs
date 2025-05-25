@@ -21,6 +21,7 @@ namespace Services.Shapes.UI
             table.AddColumn("[yellow]Value[/]");
 
             table.AddRow("Shape", model.ShapeName);
+            table.AddRow("ID", model.ShapesModelId.ToString());
             table.AddRow("Base", model.Base.ToString("N2"));
             table.AddRow("Height", model.Height.ToString("N2"));
             if(model.SideA != null)

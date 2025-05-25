@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Models;
+﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace Services.Shapes.Interfaces
     public interface IDisplayCRUD
     {
         void DisplayReadShapes(List<ShapesModel> shape);
-        object DisplaySelectShape(List<object> shapeList);
-        void DisplayUpdateShape(int shapeId, string shape);
+        ShapesModel DisplaySelectShape(List<ShapesModel> shapeList);
+        ShapeUpdateInput GetUpdatedShapeInput(ShapesModel shape);
+        void DisplayShape(ShapesModel model);
     }
 }
     

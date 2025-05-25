@@ -1,8 +1,10 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
+using Services.Modules;
 using Services.Shapes.Interfaces;
 using Services.Shapes.Strategies;
-using Services.Modules;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,8 +43,10 @@ namespace Services.Shapes
                     CalculateRectangle();
                     break;
                 case "Parallelogram":
+                    CalculateParallelogram(input);
+                    break;
                 case "Rhombus":
-                    CalculateParallelogram();
+                    CalculateParallelogram(input);
                     break;
                 case "Triangle":
                     CalculateTriangle();
@@ -69,7 +73,7 @@ namespace Services.Shapes
                 DateOfCalculation = DateOnly.FromDateTime(DateTime.Now)
             };
 
-            SaveShape(rectangleModel);
+            SaveShape(rectangleModel, false);
 
             DisplayResult.DisplayShape(rectangleModel);
         }
@@ -93,15 +97,15 @@ namespace Services.Shapes
                 DateOfCalculation = DateOnly.FromDateTime(DateTime.Now)
             };
 
-            SaveShape(triangleModel);
+            SaveShape(triangleModel, false);
 
             DisplayResult.DisplayShape(triangleModel);
         }
 
 
-        public void CalculateParallelogram()
+        public void CalculateParallelogram(string shape)
         {
-            var dto = _inputReader.GetParallelogramInput();
+            var dto = _inputReader.GetParallelogramInput(shape);
             var area = (decimal)_parallelogramStrategy.CalculateArea(dto);
             var circumference = (decimal)_parallelogramStrategy.CalculateCircumference(dto);
             bool isRhombus = dto.Base == dto.SideA;
@@ -126,100 +130,145 @@ namespace Services.Shapes
                 parallelogramModel.ShapeName = "Parallelogram";
             }
       
-            SaveShape(parallelogramModel);
+            SaveShape(parallelogramModel, false);
 
             DisplayResult.DisplayShape(parallelogramModel);
         }
 
-        public void SaveShape (ShapesModel shapesModel)
+        public void SaveShape(ShapesModel shapesModel, bool isUpdate)
         {
-            _dbContext.ShapesModels.Add(shapesModel);
+            if (isUpdate)
+            {
+                _dbContext.ShapesModels.Update(shapesModel);
+            }
+            else
+            {
+                _dbContext.ShapesModels.Add(shapesModel);
+            }
             _dbContext.SaveChanges();
         }
 
         /* READ */
         public void ReadWhatShapes(string shape)
         {
+            var shapesToDisplay = new List<ShapesModel>();
             switch (shape)
             {
                 case "Rectangle":
                 case "Triangle":
                 case "Parallelogram":
                 case "Rhombus":
-                    ReadAllSpecificShape(shape);
+                    shapesToDisplay = ReadAllSpecificShape(shape);
                     break;
                 case "All Shapes":
-                    ReadAllShapes();
+                    shapesToDisplay = ReadAllShapes();
                     break;
                 default:
                     throw new NotImplementedException($"Shape '{shape}' is not implemented for display.");
             }
+
+            _displayCRUD.DisplayReadShapes(shapesToDisplay);
         }
-        public void ReadAllShapes()
+        public List<ShapesModel> ReadAllShapes()
         {
 
            var allShapes = _dbContext.ShapesModels.ToList();
-
-           _displayCRUD.DisplayReadShapes(allShapes);
+           return allShapes;
         }
 
-        public void ReadAllSpecificShape(string shape)
+        public List<ShapesModel> ReadAllSpecificShape(string shape)
         {
 
             var allSpecificShape = _dbContext.ShapesModels.Where(s => s.ShapeName == shape).ToList();
             if (allSpecificShape.Count == 0)
             {
-                throw new InvalidOperationException($"No {shape} found.");
+                AnsiConsole.MarkupLine($"[red]No shapes of type '{shape}' found.[/]");
             }
-            _displayCRUD.DisplayReadShapes(allSpecificShape);
+            return allSpecificShape;
         }
 
         /* UPDATE */
 
-        //public void UpdateShape(string shape)
-        //{
-        //    var shapeId = SelectOneShape(shape);
-        //    _displayCRUD.DisplayUpdateShape(shapeId, shape);
+        public void UpdateShape(string shape)
+        {
+            var selectedShape = SelectOneShape(shape);
+            if (selectedShape == null)
+            {
+                AnsiConsole.MarkupLine("[red]Press any key to go back to the menu...[/]");
+                Console.ReadKey(true);
+                return;
+            }
+            var shapeToUpdate = _displayCRUD.GetUpdatedShapeInput(selectedShape);
 
-        //}
+            ApplyShapeUpdates(selectedShape, shapeToUpdate);
+        }
 
-        //public int SelectOneShape(string shape)
-        //{
-        //    List<object> shapeList = null; // Initialize the variable with a default value
-        //    var selectedShape = new object(); // Initialize to avoid null reference
-        //    int shapeId = 0; // Initialize to avoid null reference
-        //    switch (shape)
-        //    {
-        //        case "Rectangle":
-        //            shapeList = _dbContext.RectangleModels.ToList<object>();
-        //            selectedShape = _displayCRUD.DisplaySelectShape(shapeList);
-        //            shapeId = ((RectangleModel)selectedShape).RectangleModelId;
-        //            break;
-        //        case "Triangle":
-        //            shapeList = _dbContext.Triangles.ToList<object>();
-        //            selectedShape = _displayCRUD.DisplaySelectShape(shapeList);
-        //            shapeId = ((Triangle)selectedShape).TriangleId;
-        //            break;
-        //        case "Parallelogram":
-        //            shapeList = _dbContext.Parallelograms.Where(p => !p.IsRhombus).ToList<object>();
-        //            selectedShape = _displayCRUD.DisplaySelectShape(shapeList);
-        //            shapeId = ((Parallelogram)selectedShape).ParallelogramId;
-        //            break;
-        //        case "Rhombus":
-        //            shapeList = _dbContext.Parallelograms.Where(p => p.IsRhombus).ToList<object>();
-        //            selectedShape = _displayCRUD.DisplaySelectShape(shapeList);
-        //            shapeId = ((Parallelogram)selectedShape).ParallelogramId;
-        //            break;
-        //        default:
-        //            break;
-        //    }
+        public void ApplyShapeUpdates(ShapesModel shape, ShapeUpdateInput input)
+        {
+            bool recalc = false;
 
-        //    if (selectedShape == null || shapeId == 0)
-        //    {
-        //        throw new InvalidOperationException($"No {shape} found to update.");
-        //    }
+            if (input.Base.HasValue && input.Base.Value != shape.Base) { shape.Base = input.Base.Value; recalc = true; }
+            if (input.Height.HasValue && input.Height.Value != shape.Height) { shape.Height = input.Height.Value; recalc = true; }
+            if (input.SideA.HasValue && input.SideA.Value != shape.SideA) { shape.SideA = input.SideA; recalc = true; }
+            if (input.SideB.HasValue && input.SideB.Value != shape.SideB) { shape.SideB = input.SideB; recalc = true; }
+            if (input.SideC.HasValue && input.SideC.Value != shape.SideC) { shape.SideC = input.SideC; recalc = true; }
 
-        //    return shapeId;
-        //}
+            if (recalc)
+            {
+                switch (shape.ShapeName)
+                {
+                    case "Rectangle":
+                        var rectDto = new RectangleDTO
+                        {
+                            Base = shape.Base,
+                            Height = shape.Height
+                        };
+                        shape.Area = (decimal)_rectangleStrategy.CalculateArea(rectDto);
+                        shape.Circumference = (decimal)_rectangleStrategy.CalculateCircumference(rectDto);
+                        break;
+
+                    case "Triangle":
+                        var triDto = new TriangleDTO
+                        {
+                            Base = shape.Base,
+                            Height = shape.Height,
+                            SideA = shape.SideA ?? 0,
+                            SideB = shape.SideB ?? 0,
+                            SideC = shape.SideC ?? 0
+                        };
+                        shape.Area = (decimal)_triangleStrategy.CalculateArea(triDto);
+                        shape.Circumference = (decimal)_triangleStrategy.CalculateCircumference(triDto);
+                        break;
+
+                    case "Parallelogram":
+                    case "Rhombus":
+                        var paraDto = new ParallelogramDTO
+                        {
+                            Base = shape.Base,
+                            Height = shape.Height,
+                            SideA = shape.SideA ?? 0
+                        };
+                        shape.Area = (decimal)_parallelogramStrategy.CalculateArea(paraDto);
+                        shape.Circumference = (decimal)_parallelogramStrategy.CalculateCircumference(paraDto);
+                        break;
+                }
+
+                SaveShape(shape, true);
+                _displayCRUD.DisplayShape(shape);
+            }
+        }
+
+        public ShapesModel SelectOneShape(string shape)
+        {
+            var shapeList = ReadAllSpecificShape(shape).ToList();
+
+            if (shapeList.Count == 0)
+            {
+                return null;
+            }
+
+            ShapesModel selectedShape = _displayCRUD.DisplaySelectShape(shapeList);
+            return selectedShape;
+        }
     }
 }

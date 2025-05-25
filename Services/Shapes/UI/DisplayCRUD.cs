@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.DTOs;
 using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Services.Shapes;
@@ -25,7 +26,6 @@ namespace Services.Shapes.UI
         public void DisplayReadShapes(List<ShapesModel> shapeList)
         {
             const int pageSize = 10;
-            // Sort by DateOfCalculation descending (newest first)
             var sortedList = shapeList
                 .OrderByDescending(s => s.DateOfCalculation)
                 .ToList();
@@ -95,22 +95,69 @@ namespace Services.Shapes.UI
             }
         }
 
-        public object DisplaySelectShape(List<object> shapeList)
+        public ShapesModel DisplaySelectShape(List<ShapesModel> shapeList)
         {
+            if (shapeList == null || !shapeList.Any())
+            {
+                AnsiConsole.MarkupLine("[red]No shapes available to select.[/]");
+                return null;
+            }
             var selectedShape = AnsiConsole.Prompt(
-                new SelectionPrompt<object>()
+                new SelectionPrompt<ShapesModel>()
                     .Title("Select a [magenta2]shape[/]:")
                     .PageSize(10)
                     .MoreChoicesText("[grey](Use arrow keys to navigate)[/]")
                     .HighlightStyle(new Style().Foreground(Color.Fuchsia))
                     .AddChoices(shapeList)
+                    .UseConverter(shape => $"{shape.ShapeName} (ID: {shape.ShapesModelId}) - Area: {shape.Area}, Circumference: {shape.Circumference}, Date: {shape.DateOfCalculation.ToShortDateString()}")
             );
             return selectedShape;
         }
 
-        public void DisplayUpdateShape(int shapeId, string shape)
+        public ShapeUpdateInput GetUpdatedShapeInput(ShapesModel shape)
         {
-            
+            var input = new ShapeUpdateInput();
+
+            decimal? Prompt(string prop, decimal? current)
+            {
+                var prompt = new TextPrompt<string>($"Enter new value for [green]{prop}[/] (current: {current?.ToString() ?? "null"}, leave blank to keep):")
+                    .AllowEmpty();
+                var val = AnsiConsole.Prompt(prompt);
+                if (string.IsNullOrWhiteSpace(val)) return null;
+                if (decimal.TryParse(val, out var result)) return result;
+                AnsiConsole.MarkupLine("[red]Invalid input. Value not updated.[/]");
+                return null;
+            }
+
+            input.Base = Prompt("Base", shape.Base);
+            input.Height = Prompt("Height", shape.Height);
+            if (shape.SideA.HasValue) input.SideA = Prompt("SideA", shape.SideA);
+            if (shape.SideB.HasValue) input.SideB = Prompt("SideB", shape.SideB);
+            if (shape.SideC.HasValue) input.SideC = Prompt("SideC", shape.SideC);
+
+            return input;
+        }
+
+        public void DisplayShape(ShapesModel model)
+        {
+            var table = new Table()
+                .Border(TableBorder.Rounded)
+                .Title($"[yellow]Shape Details - {model.ShapeName}[/]");
+            table.AddColumn("[yellow]Property[/]");
+            table.AddColumn("[yellow]Value[/]");
+            table.AddRow("ID", model.ShapesModelId.ToString());
+            table.AddRow("Base", model.Base.ToString("N2"));
+            table.AddRow("Height", model.Height.ToString("N2"));
+            if (model.SideA.HasValue) table.AddRow("Side A", model.SideA.Value.ToString("N2"));
+            if (model.SideB.HasValue) table.AddRow("Side B", model.SideB.Value.ToString("N2"));
+            if (model.SideC.HasValue) table.AddRow("Side C", model.SideC.Value.ToString("N2"));
+            table.AddRow("Area", model.Area.ToString("N2"));
+            table.AddRow("Circumference", model.Circumference.ToString("N2"));
+            table.AddRow("Date of Calculation", model.DateOfCalculation.ToString("yyyy-MM-dd"));
+            AnsiConsole.Write(table);
+
+            AnsiConsole.MarkupLine("[green]Shape details updated successfully![/]");
+            AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
         }
     }
 }
