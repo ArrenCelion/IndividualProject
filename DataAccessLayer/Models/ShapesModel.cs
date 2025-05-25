@@ -17,6 +17,6 @@ namespace DataAccessLayer.Models
         public decimal? SideC { get; set; }
         public decimal Area { get; set; }
         public decimal Circumference { get; set; }
-        public DateOnly DateOfCalculation { get; set; }
+        public DateOnly DateOfCalculation { get; set; } //TODO: Change to DateTime if you need time precision
     }
 }
