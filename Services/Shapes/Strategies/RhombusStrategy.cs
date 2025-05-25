@@ -16,6 +16,6 @@ namespace Services.Shapes.Strategies
             (double)(dto.Base * dto.Height);
 
         public double CalculateCircumference(ParallelogramDTO dto) =>
-            4 * (double)(dto.Side);
+            4 * (double)(dto.SideA);
     }
 }

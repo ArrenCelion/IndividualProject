@@ -14,38 +14,23 @@ namespace Services.Shapes.UI
 {
     public class DisplayCRUD : IDisplayCRUD
     {
-        private readonly IShapeService _shapeService;
+        private readonly ApplicationDbContext _dbContext;
 
 
-        public DisplayCRUD(IShapeService shapeService)
+        public DisplayCRUD(ApplicationDbContext dbContext)
         {
-            _shapeService = shapeService;
+            _dbContext = dbContext;
         }
 
-        public void DisplayReadShapes(string shape)
+        public void DisplayReadShapes(List<ShapesModel> shapeList)
         {
-            var shapeList = new List<string>();
-            switch (shape)
-            {
-                case "Rectangle":
-                    shapeList = _shapeService.ReadAllRectangles();
-                    break;
-                case "Triangle":
-                    shapeList = _shapeService.ReadAllTriangles();
-                    break;
-                case "Parallelogram":
-                case "Rhombus":
-                    shapeList = _shapeService.ReadAllParallelograms(shape.ToLower());
-                    break;
-                case "All Shapes":
-                    shapeList = _shapeService.ReadAllShapes();
-                    break;
-                default:
-                    throw new NotImplementedException($"Shape '{shape}' is not implemented for display.");
-            }
-
             const int pageSize = 10;
-            int totalPages = (int)Math.Ceiling(shapeList.Count / (double)pageSize);
+            // Sort by DateOfCalculation descending (newest first)
+            var sortedList = shapeList
+                .OrderByDescending(s => s.DateOfCalculation)
+                .ToList();
+
+            int totalPages = (int)Math.Ceiling(sortedList.Count / (double)pageSize);
 
             while (true)
             {
@@ -68,7 +53,7 @@ namespace Services.Shapes.UI
                     break;
 
                 int currentPage = int.Parse(selectedPage.Split(' ')[1]);
-                var shapesToShow = shapeList
+                var shapesToShow = sortedList
                     .Skip((currentPage - 1) * pageSize)
                     .Take(pageSize)
                     .ToList();
@@ -76,17 +61,57 @@ namespace Services.Shapes.UI
                 var table = new Table()
                     .Title($"[magenta2]Shapes - Page {currentPage} of {totalPages}[/]")
                     .Border(TableBorder.Rounded);
-                table.AddColumn("[violet]Shape Info[/]");
+
+                // Add columns for each property you want to display
+                table.AddColumn("[violet]ID[/]");
+                table.AddColumn("[violet]Shape Name[/]");
+                table.AddColumn("[violet]Base[/]");
+                table.AddColumn("[violet]Height[/]");
+                table.AddColumn("[violet]SideA[/]");
+                table.AddColumn("[violet]SideB[/]");
+                table.AddColumn("[violet]SideC[/]");
+                table.AddColumn("[violet]Area[/]");
+                table.AddColumn("[violet]Circumference[/]");
+                table.AddColumn("[violet]Date[/]");
 
                 foreach (var s in shapesToShow)
                 {
-                    table.AddRow(s);
+                    table.AddRow(
+                        s.ShapesModelId.ToString(),
+                        s.ShapeName,
+                        s.Base.ToString(),
+                        s.Height.ToString(),
+                        s.SideA?.ToString() ?? "-",
+                        s.SideB?.ToString() ?? "-",
+                        s.SideC?.ToString() ?? "-",
+                        s.Area.ToString(),
+                        s.Circumference.ToString(),
+                        s.DateOfCalculation.ToString()
+                    );
                 }
 
                 AnsiConsole.Clear();
                 AnsiConsole.Write(table);
-
             }
+        }
+
+        public object DisplaySelectShape(List<object> shapeList)
+        {
+            var selectedShape = AnsiConsole.Prompt(
+                new SelectionPrompt<object>()
+                    .Title("Select a [magenta2]shape[/]:")
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Use arrow keys to navigate)[/]")
+                    .HighlightStyle(new Style().Foreground(Color.Fuchsia))
+                    .AddChoices(shapeList)
+            );
+            return selectedShape;
+        }
+
+        public void DisplayUpdateShape(int shapeId, string shape)
+        {
+            
         }
     }
 }
+   

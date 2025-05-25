@@ -10,6 +10,6 @@ namespace DataAccessLayer.DTOs
     {
         public decimal Base { get; set; }
         public decimal Height { get; set; }
-        public decimal Side { get; set; }
+        public decimal SideA { get; set; }
     }
 }

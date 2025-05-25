@@ -61,7 +61,7 @@ namespace Services.Shapes.UI
             {
                 Base = (decimal)baseLength,
                 Height = (decimal)height,
-                Side = (decimal)side
+                SideA = (decimal)side
             };
         }
 

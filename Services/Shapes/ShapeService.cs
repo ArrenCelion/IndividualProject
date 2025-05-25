@@ -19,14 +19,16 @@ namespace Services.Shapes
         private readonly TriangleStrategy _triangleStrategy;
         private readonly ParallelogramStrategy _parallelogramStrategy;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IDisplayCRUD _displayCRUD;
 
-        public ShapeService(IInputReader inputReader, RectangleStrategy rectangleStrategy, ApplicationDbContext dbContext, TriangleStrategy triangleStrategy, ParallelogramStrategy parallelogramStrategy)
+        public ShapeService(IInputReader inputReader, RectangleStrategy rectangleStrategy, ApplicationDbContext dbContext, TriangleStrategy triangleStrategy, ParallelogramStrategy parallelogramStrategy, IDisplayCRUD displayCRUD)
         {
             _inputReader = inputReader;
             _rectangleStrategy = rectangleStrategy;
             _dbContext = dbContext;
             _triangleStrategy = triangleStrategy;
             _parallelogramStrategy = parallelogramStrategy;
+            _displayCRUD = displayCRUD;
         }
 
         public IDisplayResult DisplayResult { get; set; }
@@ -57,8 +59,9 @@ namespace Services.Shapes
             var area = (decimal)_rectangleStrategy.CalculateArea(dto);
             var circumference = (decimal)_rectangleStrategy.CalculateCircumference(dto);
 
-            var rectangleModel = new RectangleModel
+            var rectangleModel = new ShapesModel
             {
+                ShapeName = "Rectangle",
                 Base = dto.Base,
                 Height = dto.Height,
                 Area = area,
@@ -66,9 +69,9 @@ namespace Services.Shapes
                 DateOfCalculation = DateOnly.FromDateTime(DateTime.Now)
             };
 
-            SaveRectangle(rectangleModel);
+            SaveShape(rectangleModel);
 
-            DisplayResult.DisplayRectangle("Rectangle", rectangleModel);
+            DisplayResult.DisplayShape(rectangleModel);
         }
 
         public void CalculateTriangle()
@@ -77,8 +80,9 @@ namespace Services.Shapes
             var area = (decimal)_triangleStrategy.CalculateArea(dto);
             var circumference = (decimal)_triangleStrategy.CalculateCircumference(dto);
 
-            var triangleModel = new Triangle
+            var triangleModel = new ShapesModel
             {
+                ShapeName = "Triangle",
                 Base = dto.Base,
                 Height = dto.Height,
                 SideA = dto.SideA,
@@ -89,148 +93,133 @@ namespace Services.Shapes
                 DateOfCalculation = DateOnly.FromDateTime(DateTime.Now)
             };
 
-            SaveTriangle(triangleModel);
+            SaveShape(triangleModel);
 
-            DisplayResult.DisplayTriangle("Triangle", triangleModel);
+            DisplayResult.DisplayShape(triangleModel);
         }
+
 
         public void CalculateParallelogram()
         {
             var dto = _inputReader.GetParallelogramInput();
             var area = (decimal)_parallelogramStrategy.CalculateArea(dto);
             var circumference = (decimal)_parallelogramStrategy.CalculateCircumference(dto);
-            bool isRhombus = dto.Base == dto.Side;
+            bool isRhombus = dto.Base == dto.SideA;
 
-            var parallelogramModel = new Parallelogram
+
+            var parallelogramModel = new ShapesModel
             {
                 Base = dto.Base,
                 Height = dto.Height,
-                Side = dto.Side,
+                SideA = dto.SideA,
                 Area = area,
                 Circumference = circumference,
                 DateOfCalculation = DateOnly.FromDateTime(DateTime.Now),
-                IsRhombus = isRhombus
             };
 
-            SaveParallelogram(parallelogramModel);
             if (isRhombus)
             {
-                DisplayResult.DisplayParallelogram("Rhombus", parallelogramModel);
+                parallelogramModel.ShapeName = "Rhombus";
             }
             else
-                DisplayResult.DisplayParallelogram("Parallelogram", parallelogramModel);
+            {
+                parallelogramModel.ShapeName = "Parallelogram";
+            }
+      
+            SaveShape(parallelogramModel);
+
+            DisplayResult.DisplayShape(parallelogramModel);
         }
 
-        public void SaveRectangle(RectangleModel rectangleModel)
+        public void SaveShape (ShapesModel shapesModel)
         {
-            _dbContext.RectangleModels.Add(rectangleModel);
-            _dbContext.SaveChanges();
-        }
-
-        public void SaveTriangle(Triangle triangleModel)
-        {
-            _dbContext.Triangles.Add(triangleModel);
-            _dbContext.SaveChanges();
-        }
-
-        public void SaveParallelogram(Parallelogram parallelogramModel)
-        {
-            _dbContext.Parallelograms.Add(parallelogramModel);
+            _dbContext.ShapesModels.Add(shapesModel);
             _dbContext.SaveChanges();
         }
 
         /* READ */
-
-        public List<string> ReadAllShapes()
+        public void ReadWhatShapes(string shape)
         {
-
-            var rectangles = ReadAllRectangles();
-            var triangles = ReadAllTriangles();
-            var parallelograms = ReadAllParallelograms("parallelograms");
-            var rhombuses = ReadAllParallelograms("rhombus");
-
-            var allShapes = new List<string>();
-            allShapes.AddRange(rectangles);
-            allShapes.AddRange(triangles);
-            allShapes.AddRange(parallelograms);
-            allShapes.AddRange(rhombuses);
-
-            return allShapes;
-        }
-
-        public List<string> ReadAllRectangles()
-        {
-            var rectangles = _dbContext.RectangleModels
-                  .Select(r => new
-                  {
-                      Shape = "Rectangle",
-                      Base = r.Base.ToString(),
-                      Height = r.Height.ToString(),
-                      Area = r.Area.ToString(),
-                      Circumference = r.Circumference.ToString(),
-                      Date = r.DateOfCalculation.ToString()
-                  });
-
-            return rectangles.Select(r =>
-                $"{r.Shape}, Base: {r.Base}, Height: {r.Height}, Area: {r.Area}, Circumference: {r.Circumference}, Date: {r.Date}"
-            ).ToList();
-        }
-        public List<string> ReadAllTriangles()
-        {
-            var triangles = _dbContext.Triangles
-                  .Select(t => new
-                  {
-                      Shape = "Triangle",
-                      Base = t.Base.ToString(),
-                      Height = t.Height.ToString(),
-                      Area = t.Area.ToString(),
-                      Circumference = t.Circumference.ToString(),
-                      Date = t.DateOfCalculation.ToString()
-                  });
-
-            return triangles.Select(t =>
-                $"{t.Shape}, Base: {t.Base}, Height: {t.Height}, Area: {t.Area}, Circumference: {t.Circumference}, Date: {t.Date}"
-            ).ToList();
-        }
-        public List<string> ReadAllParallelograms(string type)
-        {
-            if (type == "rhombus")
+            switch (shape)
             {
-                var rhombuses = _dbContext.Parallelograms
-                    .Where(p => p.IsRhombus)
-                    .Select(p => new
-                    {
-                        Shape = "Rhombus",
-                        Base = p.Base.ToString(),
-                        Height = p.Height.ToString(),
-                        Area = p.Area.ToString(),
-                        Circumference = p.Circumference.ToString(),
-                        Date = p.DateOfCalculation.ToString()
-                    });
-
-                return rhombuses.Select(r =>
-                    $"{r.Shape}, Base: {r.Base}, Height: {r.Height}, Area: {r.Area}, Circumference: {r.Circumference}, Date: {r.Date}"
-                ).ToList();
-            }
-            else
-            {
-                var parallelograms = _dbContext.Parallelograms
-                    .Where(p => !p.IsRhombus)
-                    .Select(p => new
-                    {
-                        Shape = "Parallelogram",
-                        Base = p.Base.ToString(),
-                        Height = p.Height.ToString(),
-                        Area = p.Area.ToString(),
-                        Circumference = p.Circumference.ToString(),
-                        Date = p.DateOfCalculation.ToString()
-                    });
-
-                return parallelograms.Select(p =>
-                    $"{p.Shape}, Base: {p.Base}, Height: {p.Height}, Area: {p.Area}, Circumference: {p.Circumference}, Date: {p.Date}"
-                ).ToList();
+                case "Rectangle":
+                case "Triangle":
+                case "Parallelogram":
+                case "Rhombus":
+                    ReadAllSpecificShape(shape);
+                    break;
+                case "All Shapes":
+                    ReadAllShapes();
+                    break;
+                default:
+                    throw new NotImplementedException($"Shape '{shape}' is not implemented for display.");
             }
         }
+        public void ReadAllShapes()
+        {
 
+           var allShapes = _dbContext.ShapesModels.ToList();
+
+           _displayCRUD.DisplayReadShapes(allShapes);
+        }
+
+        public void ReadAllSpecificShape(string shape)
+        {
+
+            var allSpecificShape = _dbContext.ShapesModels.Where(s => s.ShapeName == shape).ToList();
+            if (allSpecificShape.Count == 0)
+            {
+                throw new InvalidOperationException($"No {shape} found.");
+            }
+            _displayCRUD.DisplayReadShapes(allSpecificShape);
+        }
+
+        /* UPDATE */
+
+        //public void UpdateShape(string shape)
+        //{
+        //    var shapeId = SelectOneShape(shape);
+        //    _displayCRUD.DisplayUpdateShape(shapeId, shape);
+
+        //}
+
+        //public int SelectOneShape(string shape)
+        //{
+        //    List<object> shapeList = null; // Initialize the variable with a default value
+        //    var selectedShape = new object(); // Initialize to avoid null reference
+        //    int shapeId = 0; // Initialize to avoid null reference
+        //    switch (shape)
+        //    {
+        //        case "Rectangle":
+        //            shapeList = _dbContext.RectangleModels.ToList<object>();
+        //            selectedShape = _displayCRUD.DisplaySelectShape(shapeList);
+        //            shapeId = ((RectangleModel)selectedShape).RectangleModelId;
+        //            break;
+        //        case "Triangle":
+        //            shapeList = _dbContext.Triangles.ToList<object>();
+        //            selectedShape = _displayCRUD.DisplaySelectShape(shapeList);
+        //            shapeId = ((Triangle)selectedShape).TriangleId;
+        //            break;
+        //        case "Parallelogram":
+        //            shapeList = _dbContext.Parallelograms.Where(p => !p.IsRhombus).ToList<object>();
+        //            selectedShape = _displayCRUD.DisplaySelectShape(shapeList);
+        //            shapeId = ((Parallelogram)selectedShape).ParallelogramId;
+        //            break;
+        //        case "Rhombus":
+        //            shapeList = _dbContext.Parallelograms.Where(p => p.IsRhombus).ToList<object>();
+        //            selectedShape = _displayCRUD.DisplaySelectShape(shapeList);
+        //            shapeId = ((Parallelogram)selectedShape).ParallelogramId;
+        //            break;
+        //        default:
+        //            break;
+        //    }
+
+        //    if (selectedShape == null || shapeId == 0)
+        //    {
+        //        throw new InvalidOperationException($"No {shape} found to update.");
+        //    }
+
+        //    return shapeId;
+        //}
     }
 }

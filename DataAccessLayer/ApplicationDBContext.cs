@@ -12,9 +12,10 @@ namespace DataAccessLayer
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<RectangleModel> RectangleModels { get; set; }
-        public DbSet<Triangle> Triangles { get; set; }
-        public DbSet<Parallelogram> Parallelograms { get; set; }
+        //public DbSet<RectangleModel> RectangleModels { get; set; }
+        //public DbSet<Triangle> Triangles { get; set; }
+        //public DbSet<Parallelogram> Parallelograms { get; set; }
+        public DbSet<ShapesModel> ShapesModels { get; set; }
         public DbSet<Calculator> Calculators { get; set; }
         public DbSet<RockPaperScissor> RockPaperScissors { get; set; }
 

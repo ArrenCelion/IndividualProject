@@ -9,8 +9,6 @@ namespace Services.Shapes.Interfaces
 {
     public interface IDisplayResult
     {
-        void DisplayRectangle(string shapeName, RectangleModel model);
-        void DisplayTriangle(string shapeName, Triangle model);
-        void DisplayParallelogram(string shapeName, Parallelogram model);
+        void DisplayShape(ShapesModel model);
     }
 }

@@ -40,7 +40,7 @@ namespace ShapesApp
                         RunShapesCrudMenu(input);
                         break;
                     case "Read all Shapes":
-                        _displayCRUD.DisplayReadShapes("All Shapes");
+                        _shapeService.ReadWhatShapes("All Shapes");
                         break;
                     case "Back":
                         return;
@@ -60,7 +60,7 @@ namespace ShapesApp
                          _shapeService.CalculateShape(input);
                         break;
                     case "Read all":
-                        _displayCRUD.DisplayReadShapes(input);
+                        _shapeService.ReadWhatShapes(input);
                         break;
                     case "Update":
                         // Call the method to update a shape
