@@ -23,5 +23,6 @@ namespace Services.Shapes.Interfaces
         ShapesModel SelectOneShape(string shapeName);
         void UpdateShape(string shapeName);
 
+        void DeleteShape(string shape);
     }
 }

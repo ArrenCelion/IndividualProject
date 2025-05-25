@@ -66,7 +66,7 @@ namespace ShapesApp
                         _shapeService.UpdateShape(input);
                         break;
                     case "Delete":
-                        // Call the method to delete a shape
+                        _shapeService.DeleteShape(input); //TODO: Hard Delete, fix soft delete?
                         break;
                     case "Back":
                         return;

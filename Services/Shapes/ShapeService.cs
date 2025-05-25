@@ -203,6 +203,37 @@ namespace Services.Shapes
             ApplyShapeUpdates(selectedShape, shapeToUpdate);
         }
 
+        public void DeleteShape(string shape)
+        {
+            var selectedShape = SelectOneShape(shape);
+            if (selectedShape == null)
+            {
+                AnsiConsole.MarkupLine("[red]Press any key to go back to the menu...[/]");
+                Console.ReadKey(true);
+                return;
+            }
+            AnsiConsole.MarkupLine($"[yellow]Are you sure you want to delete the shape '{selectedShape.ShapeName}' with ID {selectedShape.ShapesModelId}? (y/n)[/]");
+            var confirmation = AnsiConsole.Prompt(new TextPrompt<string>("Press [green]y[/] to confirm or [red]n[/] to cancel:")
+                .AllowEmpty().Validate(input => input.ToLower() == "y" || input.ToLower() == "n" ? ValidationResult.Success() : ValidationResult.Error("[red]Invalid input, please enter 'y' or 'n'.[/]")));
+            
+            if (confirmation.ToLower() != "y")
+            {
+                AnsiConsole.MarkupLine("[red]Shape deletion cancelled.[/]");
+                AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
+                Console.ReadKey(true);
+                return;
+            }
+            else
+            {
+                _dbContext.ShapesModels.Remove(selectedShape);
+                _dbContext.SaveChanges();
+                AnsiConsole.MarkupLine($"[green]Shape '{selectedShape.ShapeName}' with ID {selectedShape.ShapesModelId} deleted successfully![/]");
+                AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
+                Console.ReadKey(true);
+                return;
+            }
+
+        }
         public void ApplyShapeUpdates(ShapesModel shape, ShapeUpdateInput input)
         {
             bool recalc = false;
