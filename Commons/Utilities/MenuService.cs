@@ -19,6 +19,7 @@ namespace Commons.Utilities
             return new DisplayMenu(title, prompt, options);
         }
 
+        /* --- SHAPES --- */
         public DisplayMenu SelectShapesMenu()
         {
             string title = "Shapes";
@@ -32,6 +33,16 @@ namespace Commons.Utilities
             string title = input;
             string[] options = { "Calculate Shape", "Read all", "Update", "Delete", "Back" };
             string prompt = $"Calculate Shape or CRUD {input}";
+            return new DisplayMenu(title, prompt, options);
+        }
+
+        /* --- ROCK PAPER SCISSOR --- */
+
+        public DisplayMenu SelectRPSMenu()
+        {
+            string title = "Rock, Paper, Scissor";
+            string[] options = { "Play Game", "Game Rules", "Read all Games", "Exit" };
+            string prompt = "Choose an option to play or read about the game";
             return new DisplayMenu(title, prompt, options);
         }
     }
