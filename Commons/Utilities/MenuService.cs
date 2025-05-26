@@ -9,7 +9,7 @@ using Commons.Interfaces;
 
 namespace Commons.Utilities
 {
-    public class MenuService : IMenuService 
+    public class MenuService : IMenuService
     {
         public DisplayMenu CreateMainMenu()
         {
@@ -18,6 +18,8 @@ namespace Commons.Utilities
             string prompt = "Welcome to the Triple Project!";
             return new DisplayMenu(title, prompt, options);
         }
+
+        /*----- SHAPES -----*/
 
         public DisplayMenu SelectShapesMenu()
         {
@@ -32,6 +34,16 @@ namespace Commons.Utilities
             string title = input;
             string[] options = { "Calculate Shape", "Read all", "Update", "Delete", "Back" };
             string prompt = $"Calculate Shape or CRUD {input}";
+            return new DisplayMenu(title, prompt, options);
+        }
+
+        /*----- ROCK PAPER SCISSOR -----*/
+
+        public DisplayMenu SelectRPSMenu()
+        {
+            string title = "Rock, Paper, Scissor";
+            string[] options = { "Play Game", "Game Rules", "View Game History", "Exit" };
+            string prompt = "Choose an option to play or view game history";
             return new DisplayMenu(title, prompt, options);
         }
     }
