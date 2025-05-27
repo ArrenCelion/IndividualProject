@@ -29,7 +29,7 @@ namespace Services.Modules
             builder.RegisterType<DisplayCRUD>().As<IDisplayCRUD>();
             builder.RegisterType<ApplicationDbContext>().AsSelf();
             builder.RegisterType<InputReaderRPS>().As<IInputReaderRPS>();
-            builder.RegisterType<RPSService>().As<IRPSService>();
+            builder.RegisterType<RPSService>().As<IRPSService>().SingleInstance().PropertiesAutowired();
             builder.RegisterType<DisplayRPS>().As<IDisplayRPS>();
         }
     }

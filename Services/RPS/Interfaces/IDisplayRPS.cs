@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccessLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Services.RPS.Interfaces
 {
     public interface IDisplayRPS
     {
-        void DisplayGameResult(string result, string playerHand, string computerHand);
+        bool DisplayGameResult(RockPaperScissor game);
         void DisplayGameRules();
     }
 }

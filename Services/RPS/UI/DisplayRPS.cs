@@ -1,4 +1,5 @@
-﻿using Services.RPS.Interfaces;
+﻿using DataAccessLayer.Models;
+using Services.RPS.Interfaces;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,13 @@ namespace Services.RPS.UI
 {
     public class DisplayRPS : IDisplayRPS
     {
-        public void DisplayGameResult(string result, string playerHand, string computerHand)
+        public bool DisplayGameResult(RockPaperScissor game)
         {
             Console.Clear();
-            AnsiConsole.MarkupLine($"[bold]Player Hand:[/] [aqua]{playerHand}[/]");
-            AnsiConsole.MarkupLine($"[bold]Computer Hand:[/] [blue]{computerHand}[/]");
+            AnsiConsole.MarkupLine($"[bold]Player Hand:[/] [aqua]{game.PlayerHand}[/]");
+            AnsiConsole.MarkupLine($"[bold]Computer Hand:[/] [blue]{game.ComputerHand}[/]");
 
-            switch (result)
+            switch (game.Result)
             {
                 case "Tie":
                     AnsiConsole.MarkupLine("[bold orange1]It's a Tie![/]");
@@ -27,13 +28,36 @@ namespace Services.RPS.UI
                 case "Computer Win":
                     AnsiConsole.MarkupLine("[bold red]Computer wins![/]");
                     break;
-                default:
-                    break;
             }
 
-            AnsiConsole.MarkupLine($"[bold]Date of Game:[/] [grey]{DateTime.Now:MM/dd/yyyy HH:mm:ss}[/]");
-            AnsiConsole.MarkupLine("[bold]Press any key to go back to the menu...[/]");
-            Console.ReadKey(true);
+            var table = new Table();
+            table.Border = TableBorder.Rounded;
+            table.AddColumn("[yellow]Player Hand[/]");
+            table.AddColumn("[yellow]Computer Hand[/]");
+            table.AddColumn("[yellow]Result[/]");
+            table.AddColumn("[yellow]Date[/]");
+            table.AddColumn("[yellow]Win Ratio[/]");
+
+            table.AddRow(
+                $"[aqua]{game.PlayerHand}[/]",
+                $"[blue]{game.ComputerHand}[/]",
+                game.Result switch
+                {
+                    "Tie" => "[orange1]It's a Tie![/]",
+                    "Player Win" => "[green]You win![/]",
+                    "Computer Win" => "[red]Computer wins![/]",
+                    _ => game.Result
+                },
+                $"[grey]{game.DateOfGame:yyyy-MM-dd}[/]",
+                $"[bold]{game.GamesWonAverage:P2}[/]"
+            );
+
+            AnsiConsole.Write(table);
+
+            AnsiConsole.MarkupLine("[yellow]Would you like to play again?[/] (y/n)");
+            var anotherGame = AnsiConsole.Prompt(new TextPrompt<string>("Press [green]y[/] to play again or [red]n[/] to exit to menu:")
+                .AllowEmpty().Validate(input => input.ToLower() == "y" || input.ToLower() == "n" ? ValidationResult.Success() : ValidationResult.Error("[red]Invalid input, please enter 'y' or 'n'.[/]")));
+            return anotherGame.ToLower() == "y";
         }
 
         public void DisplayGameRules()
@@ -49,8 +73,6 @@ namespace Services.RPS.UI
             Console.WriteLine();
             AnsiConsole.MarkupLine("[bold]Press any key to continue...[/]");
             Console.ReadKey(true);
-            
-
         }
     }
 }

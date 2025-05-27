@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Models;
 using Services.RPS.Interfaces;
 using Spectre.Console;
 using System;
@@ -45,7 +46,29 @@ namespace Services.RPS
                 result = "Computer Win";
             }
 
-            _displayRPS.DisplayGameResult(result, playerHand, computerHand);
+            var game = new RockPaperScissor
+            {
+                PlayerHand = playerHand,
+                ComputerHand = computerHand,
+                Result = result,
+                DateOfGame = DateTime.Now,
+                GamesWonAverage = 0,
+            };
+            _dbContext.Add(game);
+            _dbContext.SaveChanges();
+
+            decimal winRatio = GetGamesAverage();
+            game.GamesWonAverage = winRatio;
+
+            _dbContext.Update(game);
+            _dbContext.SaveChanges();
+
+            bool playAgain = _displayRPS.DisplayGameResult(game);
+
+            if (playAgain)
+            {
+                PlayGame(); 
+            }
         }
 
         public string RandomizeComputerHand()
@@ -75,6 +98,16 @@ namespace Services.RPS
             var input = _inputReader.GetPlayerInput();
    
             return input;
+        }
+
+        public decimal GetGamesAverage()
+        {
+            decimal allGames = _dbContext.RockPaperScissors.Count();
+            decimal gamesWon = _dbContext.RockPaperScissors.Where(w => w.Result == "Player Win").Count();
+
+            decimal ratio = gamesWon / allGames;
+
+            return ratio;
         }
     }
 }
