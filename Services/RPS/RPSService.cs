@@ -109,5 +109,17 @@ namespace Services.RPS
 
             return ratio;
         }
+
+        public void ReadAllGames()
+        {
+            var games = _dbContext.RockPaperScissors.ToList();
+            if (games.Count == 0)
+            {
+                AnsiConsole.MarkupLine("[red]No games found.[/]");
+                return;
+            }
+            
+            _displayRPS.DisplayAllGames(games);
+        }
     }
 }

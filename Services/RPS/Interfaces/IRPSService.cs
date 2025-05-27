@@ -12,5 +12,6 @@ namespace Services.RPS.Interfaces
         string RandomizeComputerHand();
         string GetPlayerHand();
         decimal GetGamesAverage();
+        void ReadAllGames();
     }
 }

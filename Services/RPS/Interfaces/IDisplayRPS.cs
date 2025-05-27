@@ -11,5 +11,6 @@ namespace Services.RPS.Interfaces
     {
         bool DisplayGameResult(RockPaperScissor game);
         void DisplayGameRules();
+        void DisplayAllGames(List<RockPaperScissor> games);
     }
 }

@@ -36,7 +36,7 @@ namespace RockPaperScissorApp
                         _displayRPS.DisplayGameRules();
                         break;
                     case "Read all Games":
-                        //ReadAllGames();
+                        _rpsService.ReadAllGames();
                         break;
                     case "Exit":
                         return;

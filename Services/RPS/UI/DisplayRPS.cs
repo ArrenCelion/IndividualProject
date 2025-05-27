@@ -74,5 +74,42 @@ namespace Services.RPS.UI
             AnsiConsole.MarkupLine("[bold]Press any key to continue...[/]");
             Console.ReadKey(true);
         }
+
+        public void DisplayAllGames(List<RockPaperScissor> games)
+        {
+            Console.Clear();
+            if (games == null || !games.Any())
+            {
+                AnsiConsole.MarkupLine("[red]No games found.[/]");
+                return;
+            }
+            var table = new Table();
+            table.Border = TableBorder.Rounded;
+            table.AddColumn("[yellow]Player Hand[/]");
+            table.AddColumn("[yellow]Computer Hand[/]");
+            table.AddColumn("[yellow]Result[/]");
+            table.AddColumn("[yellow]Date[/]");
+            table.AddColumn("[yellow]Win Ratio[/]");
+            foreach (var game in games)
+            {
+                table.AddRow(
+                    $"[aqua]{game.PlayerHand}[/]",
+                    $"[blue]{game.ComputerHand}[/]",
+                    game.Result switch
+                    {
+                        "Tie" => "[orange1]It's a Tie![/]",
+                        "Player Win" => "[green]You win![/]",
+                        "Computer Win" => "[red]Computer wins![/]",
+                        _ => game.Result
+                    },
+                    $"[grey]{game.DateOfGame:yyyy-MM-dd}[/]",
+                    $"[bold]{game.GamesWonAverage:P2}[/]"
+                );
+            }
+            AnsiConsole.Write(table);
+
+            AnsiConsole.MarkupLine("[bold]Press any key to continue...[/]");
+            Console.ReadKey(true);
+        }
     }
 }
