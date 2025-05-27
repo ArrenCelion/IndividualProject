@@ -1,5 +1,8 @@
 ﻿using Autofac;
 using DataAccessLayer;
+using Services.RPS;
+using Services.RPS.Interfaces;
+using Services.RPS.UI;
 using Services.Shapes;
 using Services.Shapes.Interfaces;
 using Services.Shapes.Strategies;
@@ -25,6 +28,9 @@ namespace Services.Modules
             builder.RegisterType<DisplayResult>().As<IDisplayResult>();
             builder.RegisterType<DisplayCRUD>().As<IDisplayCRUD>();
             builder.RegisterType<ApplicationDbContext>().AsSelf();
+            builder.RegisterType<InputReaderRPS>().As<IInputReaderRPS>();
+            builder.RegisterType<RPSService>().As<IRPSService>();
+            builder.RegisterType<DisplayRPS>().As<IDisplayRPS>();
         }
     }
 }

@@ -158,6 +158,7 @@ namespace Services.Shapes.UI
 
             AnsiConsole.MarkupLine("[green]Shape details updated successfully![/]");
             AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
+            Console.ReadKey(true);
         }
     }
 }

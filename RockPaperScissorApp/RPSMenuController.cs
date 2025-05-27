@@ -1,4 +1,5 @@
 ﻿using Commons.Interfaces;
+using Services.RPS.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace RockPaperScissorApp
     public class RPSMenuController
     {
         private readonly IMenuService _menuService;
+        private readonly IRPSService _rpsService;
 
-        public RPSMenuController(IMenuService menuService)
+        public RPSMenuController(IMenuService menuService, IRPSService rpsService)
         {
             _menuService = menuService;
+            _rpsService = rpsService;
         }
 
         public void RunShapesMenu()
@@ -25,7 +28,7 @@ namespace RockPaperScissorApp
                 switch (input)
                 {
                     case "Play Game":
-                        //PlayGame();
+                        _rpsService.PlayGame();
                         break;
                     case "Game Rules":
                         //ReadGameRules();
