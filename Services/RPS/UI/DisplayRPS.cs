@@ -12,6 +12,7 @@ namespace Services.RPS.UI
     {
         public void DisplayGameResult(string result, string playerHand, string computerHand)
         {
+            Console.Clear();
             AnsiConsole.MarkupLine($"[bold]Player Hand:[/] [aqua]{playerHand}[/]");
             AnsiConsole.MarkupLine($"[bold]Computer Hand:[/] [blue]{computerHand}[/]");
 
@@ -33,6 +34,23 @@ namespace Services.RPS.UI
             AnsiConsole.MarkupLine($"[bold]Date of Game:[/] [grey]{DateTime.Now:MM/dd/yyyy HH:mm:ss}[/]");
             AnsiConsole.MarkupLine("[bold]Press any key to go back to the menu...[/]");
             Console.ReadKey(true);
+        }
+
+        public void DisplayGameRules()
+        {
+            Console.Clear();
+            AnsiConsole.MarkupLine("[bold Fuchsia]Game Rules:[/]");
+            Console.WriteLine();
+            AnsiConsole.MarkupLine("Pick your hand in the Game Menu, the Computers hand will be randomized");
+            AnsiConsole.MarkupLine("1. Rock beats Scissors.");
+            AnsiConsole.MarkupLine("2. Scissors beat Paper.");
+            AnsiConsole.MarkupLine("3. Paper beats Rock.");
+            AnsiConsole.MarkupLine("4. If both players choose the same hand, it's a tie.");
+            Console.WriteLine();
+            AnsiConsole.MarkupLine("[bold]Press any key to continue...[/]");
+            Console.ReadKey(true);
+            
+
         }
     }
 }

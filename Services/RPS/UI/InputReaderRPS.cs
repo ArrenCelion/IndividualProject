@@ -12,6 +12,7 @@ namespace Services.RPS.UI
     {
         public string GetPlayerInput()
         {
+            Console.Clear();
             var input = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Choose your move:")

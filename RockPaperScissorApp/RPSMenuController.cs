@@ -12,11 +12,13 @@ namespace RockPaperScissorApp
     {
         private readonly IMenuService _menuService;
         private readonly IRPSService _rpsService;
+        private readonly IDisplayRPS _displayRPS;
 
-        public RPSMenuController(IMenuService menuService, IRPSService rpsService)
+        public RPSMenuController(IMenuService menuService, IRPSService rpsService, IDisplayRPS displayRPS)
         {
             _menuService = menuService;
             _rpsService = rpsService;
+            _displayRPS = displayRPS;
         }
 
         public void RunShapesMenu()
@@ -31,7 +33,7 @@ namespace RockPaperScissorApp
                         _rpsService.PlayGame();
                         break;
                     case "Game Rules":
-                        //ReadGameRules();
+                        _displayRPS.DisplayGameRules();
                         break;
                     case "Read all Games":
                         //ReadAllGames();

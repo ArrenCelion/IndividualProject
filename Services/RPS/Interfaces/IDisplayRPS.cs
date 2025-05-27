@@ -9,5 +9,6 @@ namespace Services.RPS.Interfaces
     public interface IDisplayRPS
     {
         void DisplayGameResult(string result, string playerHand, string computerHand);
+        void DisplayGameRules();
     }
 }
