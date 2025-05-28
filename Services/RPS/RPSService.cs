@@ -80,13 +80,10 @@ namespace Services.RPS
             {
                 case 1:
                     return computerHand = "Rock";
-                    break;
                 case 2:
                     return computerHand = "Paper";
-                    break;
                 case 3:
                     return computerHand = "Scissor";
-                    break;
                 default:
                     break;
             }
@@ -112,7 +109,9 @@ namespace Services.RPS
 
         public void ReadAllGames()
         {
-            var games = _dbContext.RockPaperScissors.ToList();
+            var games = _dbContext.RockPaperScissors
+                .OrderByDescending(g => g.DateOfGame)
+                .ToList();
             if (games.Count == 0)
             {
                 AnsiConsole.MarkupLine("[red]No games found.[/]");
