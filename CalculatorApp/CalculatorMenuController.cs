@@ -1,5 +1,5 @@
 ﻿using Commons.Interfaces;
-using Services.Shapes.Interfaces;
+using Services.Calculator.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +11,11 @@ namespace CalculatorApp
     public class CalculatorMenuController
     {
         private readonly IMenuService _menuService;
-        private readonly IShapeService _shapeService;
         private readonly IDisplayCRUD _displayCRUD;
 
-        public CalculatorMenuController(IMenuService menuService, IShapeService shapeService, IDisplayCRUD displayCRUD)
+        public CalculatorMenuController(IMenuService menuService, IDisplayCRUD displayCRUD)
         {
             _menuService = menuService;
-            _shapeService = shapeService;
             _displayCRUD = displayCRUD;
         }
 
@@ -50,29 +48,30 @@ namespace CalculatorApp
             }
         }
 
-        public void RunShapesCrudMenu(string input)
-        {
-            while (true)
-            {
-                var menu = _menuService.CrudShapesMenu(input);
-                var choice = menu.Run();
-                switch (choice)
-                {
-                    case "Calculate Shape":
-                        _shapeService.CalculateShape(input);
-                        break;
-                    case "Read all":
-                        _shapeService.ReadWhatShapes(input);
-                        break;
-                    case "Update":
-                        _shapeService.UpdateShape(input);
-                        break;
-                    case "Delete":
-                        _shapeService.DeleteShape(input); //TODO: Hard Delete, fix soft delete?
-                        break;
-                    case "Back":
-                        return;
-                }
-            }
-        }
+        //public void RunShapesCrudMenu(string input)
+        //{
+        //    while (true)
+        //    {
+        //        var menu = _menuService.CrudShapesMenu(input);
+        //        var choice = menu.Run();
+        //        switch (choice)
+        //        {
+        //            case "Calculate Shape":
+        //                _shapeService.CalculateShape(input);
+        //                break;
+        //            case "Read all":
+        //                _shapeService.ReadWhatShapes(input);
+        //                break;
+        //            case "Update":
+        //                _shapeService.UpdateShape(input);
+        //                break;
+        //            case "Delete":
+        //                _shapeService.DeleteShape(input); //TODO: Hard Delete, fix soft delete?
+        //                break;
+        //            case "Back":
+        //                return;
+        //        }
+        //    }
+        //}
     }
+}

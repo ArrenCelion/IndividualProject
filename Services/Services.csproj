@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Calculator\" />
+    <Folder Include="Calculator\UI\" />
   </ItemGroup>
 
 </Project>
