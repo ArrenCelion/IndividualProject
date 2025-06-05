@@ -45,5 +45,13 @@ namespace Commons.Utilities
             string prompt = "Choose an option to play or read about the game";
             return new DisplayMenu(title, prompt, options);
         }
-    }
+
+        /* --- CALCULATOR --- */
+        public DisplayMenu SelectCalcMenu()
+        {
+            string title = "Calculator";
+            string[] options = { "New calculation", "Read all", "Edit", "Delete", "Back" };
+            string prompt = "Choose an option";
+            return new DisplayMenu(title, prompt, options);
+        }
 }

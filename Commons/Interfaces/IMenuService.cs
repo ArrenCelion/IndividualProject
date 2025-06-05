@@ -13,5 +13,6 @@ namespace Commons.Interfaces
         DisplayMenu CrudShapesMenu(string input);
         DisplayMenu SelectShapesMenu();
         DisplayMenu SelectRPSMenu();
+        DisplayMenu SelectCalcMenu();
     }
 }
