@@ -16,7 +16,7 @@ namespace DataAccessLayer
         //public DbSet<Triangle> Triangles { get; set; }
         //public DbSet<Parallelogram> Parallelograms { get; set; }
         public DbSet<ShapesModel> ShapesModels { get; set; }
-        public DbSet<Calculator> Calculators { get; set; }
+        public DbSet<CalculatorModel> CalculatorModels { get; set; }
         public DbSet<RockPaperScissor> RockPaperScissors { get; set; }
 
 

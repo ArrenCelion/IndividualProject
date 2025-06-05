@@ -10,13 +10,13 @@ namespace Services.Calculator.UI
 {
     public class DisplayCRUD : IDisplayCRUD
     {
-        public void DisplayCalculationResult(decimal result)
+        public bool DisplayCalculationResult(string operation, decimal number1, decimal? number2, decimal result)
         {
-            AnsiConsole.MarkupLine($"[yellow]Result:[/] {result}");
-        }
+            if (number2.HasValue)
+                AnsiConsole.MarkupLine($"[yellow]Calculation:[/] {number1} {operation} {number2} = {result}");
+            else
+                AnsiConsole.MarkupLine($"[yellow]Calculation:[/] {operation}({number1}) = {result}");
 
-        public bool AskToContinueCalculation()
-        {
             var anotherCalculation = AnsiConsole.Prompt(
                 new TextPrompt<string>("Would you like to make another calculation? (y/n)")
                     .AllowEmpty()
@@ -30,6 +30,7 @@ namespace Services.Calculator.UI
             AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
             Console.ReadKey(true);
             return false;
+
         }
     }
 }

@@ -9,7 +9,7 @@ using Commons.Interfaces;
 
 namespace Commons.Utilities
 {
-    public class MenuService : IMenuService 
+    public class MenuService : IMenuService
     {
         public DisplayMenu CreateMainMenu()
         {
@@ -54,4 +54,5 @@ namespace Commons.Utilities
             string prompt = "Choose an option";
             return new DisplayMenu(title, prompt, options);
         }
+    }
 }

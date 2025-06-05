@@ -8,5 +8,6 @@ namespace Services.Calculator.Interfaces
 {
     public interface ICalculatorService
     {
+        void StartCalculation();
     }
 }

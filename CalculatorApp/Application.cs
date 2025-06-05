@@ -26,7 +26,7 @@ namespace CalculatorApp
                 dataInitializer.SeedData();
 
                 var controller = scope.Resolve<CalculatorMenuController>();
-                controller.RunShapesMenu();
+                controller.RunCalculatorMenu();
             }
         }
     }

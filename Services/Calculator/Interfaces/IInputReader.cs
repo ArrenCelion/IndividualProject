@@ -8,6 +8,6 @@ namespace Services.Calculator.Interfaces
 {
     public interface IInputReader
     {
-        (string Operator, decimal Number1, decimal? Number2) GetCalculationInput(IEnumerable<string> availableOperators);
+        (string Operator, decimal Number1, decimal? Number2) GetCalculationInput(string[] availableOperators);
     }
 }

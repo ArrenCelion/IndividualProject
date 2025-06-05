@@ -10,7 +10,7 @@ namespace Services.Calculator.UI
 {
     public class InputReader : IInputReader
     {
-        public (string Operator, decimal Number1, decimal? Number2) GetCalculationInput(IEnumerable<string> availableOperators)
+        public (string Operator, decimal Number1, decimal? Number2) GetCalculationInput(string[] availableOperators)
         {
             var operatorChoice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
@@ -23,7 +23,7 @@ namespace Services.Calculator.UI
             );
 
             // Adjust this logic for your unary operators
-            bool isUnary = operatorChoice == "sqrt";
+            bool isUnary = operatorChoice == "√";
 
             decimal? number2 = null;
             if (!isUnary)

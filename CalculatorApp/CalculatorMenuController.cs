@@ -12,11 +12,13 @@ namespace CalculatorApp
     {
         private readonly IMenuService _menuService;
         private readonly IDisplayCRUD _displayCRUD;
+        private readonly ICalculatorService _calculatorService;
 
-        public CalculatorMenuController(IMenuService menuService, IDisplayCRUD displayCRUD)
+        public CalculatorMenuController(IMenuService menuService, IDisplayCRUD displayCRUD, ICalculatorService calculatorService)
         {
             _menuService = menuService;
             _displayCRUD = displayCRUD;
+            _calculatorService = calculatorService;
         }
 
         public void RunCalculatorMenu()
@@ -29,16 +31,16 @@ namespace CalculatorApp
                 switch (input)
                 {
                     case "New calculation":
-                        _displayCRUD.CreateCalculation();
+                        _calculatorService.StartCalculation();
                         break;
                     case "Read all":
-                        _displayCRUD.ReadAllCalculations();
+                        //_displayCRUD.ReadAllCalculations();
                         break;
                     case "Edit":
-                        _displayCRUD.UpdateCalculation();
+                        //_displayCRUD.UpdateCalculation();
                         break;
                     case "Delete":
-                        _displayCRUD.DeleteCalculation(); //TODO: Hard Delete, fix soft delete?
+                        //_displayCRUD.DeleteCalculation(); //TODO: Hard Delete, fix soft delete?
                         break;
                     case "Back":
                         return;

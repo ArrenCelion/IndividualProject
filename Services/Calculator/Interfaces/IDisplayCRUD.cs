@@ -8,7 +8,6 @@ namespace Services.Calculator.Interfaces
 {
     public interface IDisplayCRUD
     {
-        void DisplayCalculationResult(decimal result);
-        bool AskToContinueCalculation();
+        bool DisplayCalculationResult(string operation, decimal number1, decimal? number2, decimal result);
     }
 }
