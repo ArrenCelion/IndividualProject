@@ -48,7 +48,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("CalculatorModelId");
 
-                    b.ToTable("CalculatorModels");
+                    b.ToTable("CalculatorModels", (string)null);
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.RockPaperScissor", b =>
@@ -79,7 +79,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("RockPaperScissorId");
 
-                    b.ToTable("RockPaperScissors");
+                    b.ToTable("RockPaperScissors", (string)null);
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.ShapesModel", b =>
@@ -120,7 +120,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("ShapesModelId");
 
-                    b.ToTable("ShapesModels");
+                    b.ToTable("ShapesModels", (string)null);
                 });
 #pragma warning restore 612, 618
         }

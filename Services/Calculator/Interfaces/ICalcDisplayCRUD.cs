@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Services.Calculator.Interfaces
 {
-    public interface IDisplayCRUD
+    public interface ICalcDisplayCRUD
     {
         bool DisplayCalculationResult(string operation, decimal number1, decimal? number2, decimal result);
     }

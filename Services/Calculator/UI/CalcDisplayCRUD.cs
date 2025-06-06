@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Services.Calculator.UI
 {
-    public class DisplayCRUD : IDisplayCRUD
+    public class CalcDisplayCRUD : ICalcDisplayCRUD
     {
         public bool DisplayCalculationResult(string operation, decimal number1, decimal? number2, decimal result)
         {

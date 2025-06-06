@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Services.Calculator.Interfaces
 {
-    public interface IInputReader
+    public interface ICalcInputReader
     {
         (string Operator, decimal Number1, decimal? Number2) GetCalculationInput(string[] availableOperators);
     }

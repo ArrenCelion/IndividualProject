@@ -1,5 +1,7 @@
 ﻿using Azure;
+using DataAccessLayer;
 using DataAccessLayer.Models;
+using Microsoft.EntityFrameworkCore;
 using Services.Calculator.Interfaces;
 using Services.Calculator.Strategies;
 using System;
@@ -12,8 +14,9 @@ namespace Services.Calculator
 {
     public class CalculatorService : ICalculatorService
     {
-        private readonly IInputReader _inputReader;
-        private readonly IDisplayCRUD _displayCRUD;
+        private readonly ApplicationDbContext _dbContext; 
+        private readonly ICalcInputReader _inputReader;
+        private readonly ICalcDisplayCRUD _displayCRUD;
 
         // Declare instances of the strategies  
         private readonly AdditionStrategy _additionStrategy;
@@ -23,18 +26,18 @@ namespace Services.Calculator
         private readonly ModulusStrategy _modulusStrategy;
         private readonly SquareRootStrategy _squareRootStrategy;
 
-        public CalculatorService(IInputReader inputReader, IDisplayCRUD displayCRUD)
+        public CalculatorService(ICalcInputReader inputReader, ICalcDisplayCRUD displayCRUD, ApplicationDbContext dbContext, AdditionStrategy additionStrategy, SubtractionStrategy subtractionStrategy, MultiplicationStrategy multiplicationStrategy, DivisionStrategy divisionStrategy, ModulusStrategy modulusStrategy, SquareRootStrategy squareRootStrategy)
         {
+            _dbContext = dbContext;
             _inputReader = inputReader;
             _displayCRUD = displayCRUD;
-
-            // Initialize the strategy instances  
-            _additionStrategy = new AdditionStrategy();
-            _subtractionStrategy = new SubtractionStrategy();
-            _multiplicationStrategy = new MultiplicationStrategy();
-            _divisionStrategy = new DivisionStrategy();
-            _modulusStrategy = new ModulusStrategy();
-            _squareRootStrategy = new SquareRootStrategy();
+            
+            _additionStrategy = additionStrategy;
+            _subtractionStrategy = subtractionStrategy;
+            _multiplicationStrategy = multiplicationStrategy;
+            _divisionStrategy = divisionStrategy;
+            _modulusStrategy = modulusStrategy;
+            _squareRootStrategy = squareRootStrategy;
         }
 
         public void StartCalculation()
@@ -62,13 +65,27 @@ namespace Services.Calculator
                 DateOfCalculation = DateTime.Now
             };
 
+            SaveCalculation(calculation, false);
+            
             bool anotherCalculation = _displayCRUD.DisplayCalculationResult(operatorChoice, number1, number2, result);
             
             if (anotherCalculation)
             {
-                StartCalculation(); // Recursively call to start a new calculation
+                StartCalculation(); 
             }
+        }
 
+        public void SaveCalculation(CalculatorModel calculatorModel, bool isUpdate)
+        {
+            if (isUpdate)
+            {
+                _dbContext.CalculatorModels.Update(calculatorModel);
+            }
+            else
+            {
+                _dbContext.CalculatorModels.Add(calculatorModel);
+            }
+            _dbContext.SaveChanges();
         }
     }
 }

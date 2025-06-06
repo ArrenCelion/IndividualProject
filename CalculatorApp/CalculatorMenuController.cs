@@ -11,10 +11,10 @@ namespace CalculatorApp
     public class CalculatorMenuController
     {
         private readonly IMenuService _menuService;
-        private readonly IDisplayCRUD _displayCRUD;
+        private readonly ICalcDisplayCRUD _displayCRUD;
         private readonly ICalculatorService _calculatorService;
 
-        public CalculatorMenuController(IMenuService menuService, IDisplayCRUD displayCRUD, ICalculatorService calculatorService)
+        public CalculatorMenuController(IMenuService menuService, ICalcDisplayCRUD displayCRUD, ICalculatorService calculatorService)
         {
             _menuService = menuService;
             _displayCRUD = displayCRUD;

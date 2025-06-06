@@ -1,5 +1,9 @@
 ﻿using Autofac;
 using DataAccessLayer;
+using Services.Calculator;
+using Services.Calculator.Interfaces;
+using Services.Calculator.Strategies;
+using Services.Calculator.UI;
 using Services.RPS;
 using Services.RPS.Interfaces;
 using Services.RPS.UI;
@@ -27,10 +31,22 @@ namespace Services.Modules
             builder.RegisterType<RhombusStrategy>().AsSelf();
             builder.RegisterType<DisplayResult>().As<IDisplayResult>();
             builder.RegisterType<DisplayCRUD>().As<IDisplayCRUD>();
+
             builder.RegisterType<ApplicationDbContext>().AsSelf();
+
             builder.RegisterType<InputReaderRPS>().As<IInputReaderRPS>();
             builder.RegisterType<RPSService>().As<IRPSService>().SingleInstance().PropertiesAutowired();
             builder.RegisterType<DisplayRPS>().As<IDisplayRPS>();
+
+            builder.RegisterType<CalculatorService>().As<ICalculatorService>().SingleInstance().PropertiesAutowired();
+            builder.RegisterType<CalcInputReader>().As<ICalcInputReader>();
+            builder.RegisterType<CalcDisplayCRUD>().As<ICalcDisplayCRUD>();
+            builder.RegisterType<AdditionStrategy>().AsSelf();
+            builder.RegisterType<SubtractionStrategy>().AsSelf();
+            builder.RegisterType<MultiplicationStrategy>().AsSelf();
+            builder.RegisterType<DivisionStrategy>().AsSelf();
+            builder.RegisterType<ModulusStrategy>().AsSelf();
+            builder.RegisterType<SquareRootStrategy>().AsSelf();
         }
     }
 }

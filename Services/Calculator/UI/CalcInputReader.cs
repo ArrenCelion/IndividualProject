@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Services.Calculator.UI
 {
-    public class InputReader : IInputReader
+    public class CalcInputReader : ICalcInputReader
     {
         public (string Operator, decimal Number1, decimal? Number2) GetCalculationInput(string[] availableOperators)
         {
