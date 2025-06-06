@@ -11,13 +11,11 @@ namespace CalculatorApp
     public class CalculatorMenuController
     {
         private readonly IMenuService _menuService;
-        private readonly ICalcDisplayCRUD _displayCRUD;
         private readonly ICalculatorService _calculatorService;
 
-        public CalculatorMenuController(IMenuService menuService, ICalcDisplayCRUD displayCRUD, ICalculatorService calculatorService)
+        public CalculatorMenuController(IMenuService menuService, ICalculatorService calculatorService)
         {
             _menuService = menuService;
-            _displayCRUD = displayCRUD;
             _calculatorService = calculatorService;
         }
 
@@ -40,7 +38,7 @@ namespace CalculatorApp
                         _calculatorService.UpdateCalculation();
                         break;
                     case "Delete":
-                        //_displayCRUD.DeleteCalculation(); //TODO: Hard Delete, fix soft delete?
+                        _calculatorService.DeleteCalculation();
                         break;
                     case "Back":
                         return;
@@ -49,31 +47,5 @@ namespace CalculatorApp
                 }
             }
         }
-
-        //public void RunShapesCrudMenu(string input)
-        //{
-        //    while (true)
-        //    {
-        //        var menu = _menuService.CrudShapesMenu(input);
-        //        var choice = menu.Run();
-        //        switch (choice)
-        //        {
-        //            case "Calculate Shape":
-        //                _shapeService.CalculateShape(input);
-        //                break;
-        //            case "Read all":
-        //                _shapeService.ReadWhatShapes(input);
-        //                break;
-        //            case "Update":
-        //                _shapeService.UpdateShape(input);
-        //                break;
-        //            case "Delete":
-        //                _shapeService.DeleteShape(input); //TODO: Hard Delete, fix soft delete?
-        //                break;
-        //            case "Back":
-        //                return;
-        //        }
-        //    }
-        //}
     }
 }

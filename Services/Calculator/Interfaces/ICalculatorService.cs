@@ -14,5 +14,7 @@ namespace Services.Calculator.Interfaces
         List<CalculatorModel> GetAllCalculations();
         void ReadAllCalculations();
         void UpdateCalculation();
+        void DeleteCalculation();
+        CalculatorModel SelectOneCalculation();
     }
 }

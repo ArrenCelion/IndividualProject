@@ -4,6 +4,7 @@ using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Services.Calculator.Interfaces;
 using Services.Calculator.Strategies;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -128,6 +129,53 @@ namespace Services.Calculator
                 _displayCRUD.DisplayCalculator(existingCalculation);
             }
 
+        }
+
+        public void DeleteCalculation()
+        {
+            var calculation = SelectOneCalculation();
+            if (calculation == null)
+            {
+                AnsiConsole.MarkupLine("[red]Calculation not found. Press any key to go back to the menu...[/]");
+                Console.ReadKey(true);
+                return;
+            }
+
+            AnsiConsole.MarkupLine($"[yellow]Are you sure you want to delete the calculation with ID {calculation.CalculatorModelId}? (y/n)[/]");
+            var confirmation = AnsiConsole.Prompt(
+                new TextPrompt<string>("Press [green]y[/] to confirm or [red]n[/] to cancel:")
+                    .AllowEmpty()
+                    .Validate(input => input.ToLower() == "y" || input.ToLower() == "n"
+                        ? ValidationResult.Success()
+                        : ValidationResult.Error("[red]Invalid input, please enter 'y' or 'n'.[/]"))
+            );
+
+            if (confirmation.ToLower() != "y")
+            {
+                AnsiConsole.MarkupLine("[red]Calculation deletion cancelled.[/]");
+                AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
+                Console.ReadKey(true);
+                return;
+            }
+
+            _dbContext.CalculatorModels.Remove(calculation);
+            _dbContext.SaveChanges();
+            AnsiConsole.MarkupLine($"[green]Calculation with ID {calculation.CalculatorModelId} deleted successfully![/]");
+            AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
+            Console.ReadKey(true);
+        }
+
+        public CalculatorModel SelectOneCalculation()
+        {
+            var calculationList = GetAllCalculations();
+
+            if (calculationList.Count == 0)
+            {
+                return null;
+            }
+
+            CalculatorModel selectedCalculation = _displayCRUD.DisplaySelectCalculation(calculationList);
+            return selectedCalculation;
         }
     }
 }
