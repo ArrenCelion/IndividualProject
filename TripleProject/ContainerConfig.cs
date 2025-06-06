@@ -2,6 +2,7 @@
 using Commons.Modules;
 using DataAccessLayer.Modules;
 using Microsoft.Extensions.Configuration;
+using Services.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace TripleProject
 
             // Register Autofac modules
             builder.RegisterModule(new CommonModule());
-           //builder.RegisterModule(new ServicesModule());
+            builder.RegisterModule(new ServiceModule());
             builder.RegisterModule(new DataAccessModule(configuration));
             builder.RegisterType<MainMenuController>().AsSelf();
 
