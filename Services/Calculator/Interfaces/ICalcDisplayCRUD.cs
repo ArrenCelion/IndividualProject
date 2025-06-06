@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Models;
+﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,8 @@ namespace Services.Calculator.Interfaces
     {
         bool DisplayCalculationResult(string operation, decimal number1, decimal? number2, decimal result);
         void DisplayReadCalculations(List<CalculatorModel> calcList);
+        CalculatorModel DisplaySelectCalculation(List<CalculatorModel> calcList);
+        void DisplayCalculator(CalculatorModel model);
+        CalculatorUpdateInput GetUpdatedCalculatorInput(CalculatorModel calc);
     }
 }

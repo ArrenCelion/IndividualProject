@@ -13,5 +13,6 @@ namespace Services.Calculator.Interfaces
         void SaveCalculation(CalculatorModel calculatorModel, bool isUpdate);
         List<CalculatorModel> GetAllCalculations();
         void ReadAllCalculations();
+        void UpdateCalculation();
     }
 }

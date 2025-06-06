@@ -14,7 +14,7 @@ namespace Services.Calculator
 {
     public class CalculatorService : ICalculatorService
     {
-        private readonly ApplicationDbContext _dbContext; 
+        private readonly ApplicationDbContext _dbContext;
         private readonly ICalcInputReader _inputReader;
         private readonly ICalcDisplayCRUD _displayCRUD;
 
@@ -31,7 +31,7 @@ namespace Services.Calculator
             _dbContext = dbContext;
             _inputReader = inputReader;
             _displayCRUD = displayCRUD;
-            
+
             _additionStrategy = additionStrategy;
             _subtractionStrategy = subtractionStrategy;
             _multiplicationStrategy = multiplicationStrategy;
@@ -66,12 +66,12 @@ namespace Services.Calculator
             };
 
             SaveCalculation(calculation, false);
-            
+
             bool anotherCalculation = _displayCRUD.DisplayCalculationResult(operatorChoice, number1, number2, result);
-            
+
             if (anotherCalculation)
             {
-                StartCalculation(); 
+                StartCalculation();
             }
         }
 
@@ -97,6 +97,37 @@ namespace Services.Calculator
         public List<CalculatorModel> GetAllCalculations()
         {
             return _dbContext.CalculatorModels.ToList();
+        }
+
+        public void UpdateCalculation()
+        {
+            var existingCalculation = _displayCRUD.DisplaySelectCalculation(GetAllCalculations());
+            var calculatorUpdateInput = _displayCRUD.GetUpdatedCalculatorInput(existingCalculation);
+
+            var result = calculatorUpdateInput.Operator switch
+            {
+                "+" => _additionStrategy.Execute((decimal)calculatorUpdateInput.Number1, calculatorUpdateInput.Number2),
+                "-" => _subtractionStrategy.Execute((decimal)calculatorUpdateInput.Number1, calculatorUpdateInput.Number2),
+                "*" => _multiplicationStrategy.Execute((decimal)calculatorUpdateInput.Number1, calculatorUpdateInput.Number2),
+                "/" => _divisionStrategy.Execute((decimal)calculatorUpdateInput.Number1, calculatorUpdateInput.Number2),
+                "%" => _modulusStrategy.Execute((decimal)calculatorUpdateInput.Number1, calculatorUpdateInput.Number2),
+                "√" => _squareRootStrategy.Execute((decimal)calculatorUpdateInput.Number1, calculatorUpdateInput.Number2),
+                _ => throw new InvalidOperationException("Invalid operator")
+            };
+
+            if (existingCalculation != null)
+            {
+                existingCalculation.Operator = calculatorUpdateInput.Operator;
+                existingCalculation.Number1 = (decimal)calculatorUpdateInput.Number1;
+                existingCalculation.Number2 = calculatorUpdateInput.Number2;
+                existingCalculation.Result = result;
+                existingCalculation.DateOfCalculation = DateTime.Now;
+
+                SaveCalculation(existingCalculation, true);
+
+                _displayCRUD.DisplayCalculator(existingCalculation);
+            }
+
         }
     }
 }

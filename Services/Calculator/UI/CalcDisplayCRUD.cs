@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Models;
+﻿using DataAccessLayer.DTOs;
+using DataAccessLayer.Models;
 using Services.Calculator.Interfaces;
 using Spectre.Console;
 using System;
@@ -96,6 +97,97 @@ namespace Services.Calculator.UI
                 AnsiConsole.Clear();
                 AnsiConsole.Write(table);
             }
+        }
+
+        public CalculatorModel DisplaySelectCalculation(List<CalculatorModel> calcList)
+        {
+            if (calcList == null || !calcList.Any())
+            {
+                AnsiConsole.MarkupLine("[red]No calculations available to select.[/]");
+                return null;
+            }
+            var selectedCalc = AnsiConsole.Prompt(
+                new SelectionPrompt<CalculatorModel>()
+                    .Title("Select a [magenta2]calculation[/]:")
+                    .PageSize(10)
+                    .MoreChoicesText("[grey](Use arrow keys to navigate)[/]")
+                    .HighlightStyle(new Style().Foreground(Color.Fuchsia))
+                    .AddChoices(calcList)
+                    .UseConverter(calc =>
+                        $"ID: {calc.CalculatorModelId} | {calc.Number1} {calc.Operator} {calc.Number2?.ToString() ?? ""} = {calc.Result} | Date: {calc.DateOfCalculation.ToString("yyyy-MM-dd HH:mm:ss")}"
+                    )
+            );
+            return selectedCalc;
+        }
+
+        public CalculatorUpdateInput GetUpdatedCalculatorInput(CalculatorModel calc)
+        {
+            var input = new CalculatorUpdateInput();
+
+            var operators = new[] { "+", "-", "*", "/", "%", "√" };
+            var opPrompt = new SelectionPrompt<string>()
+                .Title($"Select new [green]Operator[/] (current: {calc.Operator}, select 'Keep current' to leave unchanged):")
+                .AddChoices(operators.Append("Keep current").ToArray());
+
+            var selectedOp = AnsiConsole.Prompt(opPrompt);
+            input.Operator = selectedOp == "Keep current" ? null : selectedOp;
+
+            decimal? Prompt(string prop, decimal? current)
+            {
+                var prompt = new TextPrompt<string>($"Enter new value for [green]{prop}[/] (current: {current?.ToString() ?? "null"}, leave blank to keep):")
+                    .AllowEmpty();
+                var val = AnsiConsole.Prompt(prompt);
+                if (string.IsNullOrWhiteSpace(val)) return null;
+                if (decimal.TryParse(val, out var result)) return result;
+                AnsiConsole.MarkupLine("[red]Invalid input. Value not updated.[/]");
+                return null;
+            }
+
+            var number1Input = Prompt("First Number", calc.Number1);
+            input.Number1 = number1Input ?? calc.Number1;
+
+            var opToCheck = input.Operator ?? calc.Operator;
+            if (opToCheck != "√")
+            {
+                decimal? number2Input = null;
+                do
+                {
+                    number2Input = Prompt("Second Number", calc.Number2);
+                    if (!number2Input.HasValue && !calc.Number2.HasValue)
+                    {
+                        AnsiConsole.MarkupLine("[red]Second Number is required for this operation. Please enter a value.[/]");
+                    }
+                }
+                while (!number2Input.HasValue && !calc.Number2.HasValue);
+
+                input.Number2 = number2Input ?? calc.Number2;
+            }
+            else
+            {
+                input.Number2 = null;
+            }
+
+            return input;
+        }
+
+        public void DisplayCalculator(CalculatorModel model)
+        {
+            var table = new Table()
+                .Border(TableBorder.Rounded)
+                .Title($"[yellow]Calculation Details - ID {model.CalculatorModelId}[/]");
+            table.AddColumn("[yellow]Property[/]");
+            table.AddColumn("[yellow]Value[/]");
+            table.AddRow("ID", model.CalculatorModelId.ToString());
+            table.AddRow("Operator", model.Operator);
+            table.AddRow("First Number", model.Number1.ToString("N2"));
+            table.AddRow("Second Number", model.Number2?.ToString("N2") ?? "-");
+            table.AddRow("Result", model.Result.ToString("N2"));
+            table.AddRow("Date of Calculation", model.DateOfCalculation.ToString("yyyy-MM-dd HH:mm:ss"));
+            AnsiConsole.Write(table);
+
+            AnsiConsole.MarkupLine("[green]Calculation details updated successfully![/]");
+            AnsiConsole.MarkupLine("[green]Press any key to go back to the menu...[/]");
+            Console.ReadKey(true);
         }
     }
 }

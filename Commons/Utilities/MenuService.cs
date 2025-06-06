@@ -50,7 +50,7 @@ namespace Commons.Utilities
         public DisplayMenu SelectCalcMenu()
         {
             string title = "Calculator";
-            string[] options = { "New calculation", "Read all", "Edit", "Delete", "Back" };
+            string[] options = { "New calculation", "Read all", "Update", "Delete", "Back" };
             string prompt = "Choose an option";
             return new DisplayMenu(title, prompt, options);
         }

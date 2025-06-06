@@ -36,8 +36,8 @@ namespace CalculatorApp
                     case "Read all":
                         _calculatorService.ReadAllCalculations();
                         break;
-                    case "Edit":
-                        //_displayCRUD.UpdateCalculation();
+                    case "Update":
+                        _calculatorService.UpdateCalculation();
                         break;
                     case "Delete":
                         //_displayCRUD.DeleteCalculation(); //TODO: Hard Delete, fix soft delete?
