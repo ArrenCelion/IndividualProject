@@ -22,6 +22,10 @@ namespace Commons.Utilities
             {
                 title = "RPS";
             }
+            if (title == "Calculator")
+            {
+                title = "Calculate";
+            }
             Title = title;
             Prompt = prompt;
             Options = options;
@@ -32,7 +36,7 @@ namespace Commons.Utilities
         {
             string fontPath;
             Console.Clear();
-            if (Title == "Welcome" || Title == "Shapes" || Title == "Calculator" || Title == "RPS")
+            if (Title == "Welcome" || Title == "Shapes" || Title == "Calculate" || Title == "RPS")
             {
                 fontPath = "../../../../Commons/Assets/Electronic.flf";
             }

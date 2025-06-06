@@ -20,6 +20,7 @@ namespace DataAccessLayer
         {
             _dbContext.Database.Migrate();
             SeedShapes();
+            SeedCalculations();
             _dbContext.SaveChanges();
         }
 
@@ -35,6 +36,23 @@ namespace DataAccessLayer
                     new ShapesModel { ShapeName = "Rhombus", Base = 5, Height = 5, SideA = 5, Area = 25, Circumference = 20, DateOfCalculation = DateOnly.FromDateTime(DateTime.Now) },
                 };
                 _dbContext.ShapesModels.AddRange(shapes);
+                _dbContext.SaveChanges();
+            }
+        }
+        private void SeedCalculations()
+        {
+            if (!_dbContext.CalculatorModels.Any())
+            {
+                var calculations = new List<CalculatorModel>
+                {
+                    new CalculatorModel { Operator = "+", Number1 = 5, Number2 = 10, Result = 15, DateOfCalculation = DateTime.Now },
+                    new CalculatorModel { Operator = "-", Number1 = 20, Number2 = 8, Result = 12, DateOfCalculation = DateTime.Now },
+                    new CalculatorModel { Operator = "*", Number1 = 3, Number2 = 7, Result = 21, DateOfCalculation = DateTime.Now },
+                    new CalculatorModel { Operator = "/", Number1 = 15, Number2 = 3, Result = 5, DateOfCalculation = DateTime.Now },
+                    new CalculatorModel { Operator = "%", Number1 = 10, Number2 = 3, Result = 1, DateOfCalculation = DateTime.Now },
+                    new CalculatorModel { Operator = "√", Number1 = 16, Number2 = null, Result = 4, DateOfCalculation = DateTime.Now }
+                };
+                _dbContext.CalculatorModels.AddRange(calculations);
                 _dbContext.SaveChanges();
             }
         }
