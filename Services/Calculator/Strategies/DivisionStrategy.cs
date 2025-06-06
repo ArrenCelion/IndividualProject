@@ -9,10 +9,10 @@ namespace Services.Calculator.Strategies
 {
     public class DivisionStrategy : IOperationStrategy
     {
-        public decimal Execute(decimal a, decimal b = 0)
+        public decimal Execute(decimal a, decimal? b)
         {
             if (b == 0) throw new DivideByZeroException("Cannot divide by zero.");
-            return a / b;
+            return a / (decimal)b;
         }
     }
 }

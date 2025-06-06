@@ -12,9 +12,6 @@ namespace DataAccessLayer
 {
     public class ApplicationDbContext : DbContext
     {
-        //public DbSet<RectangleModel> RectangleModels { get; set; }
-        //public DbSet<Triangle> Triangles { get; set; }
-        //public DbSet<Parallelogram> Parallelograms { get; set; }
         public DbSet<ShapesModel> ShapesModels { get; set; }
         public DbSet<CalculatorModel> CalculatorModels { get; set; }
         public DbSet<RockPaperScissor> RockPaperScissors { get; set; }
@@ -37,6 +34,26 @@ namespace DataAccessLayer
             } 
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CalculatorModel>(entity =>
+            {
+                entity.Property(e => e.Number1).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Number2).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Result).HasColumnType("decimal(18,2)");
+            });
+
+            modelBuilder.Entity<ShapesModel>(entity =>
+            {
+                entity.Property(e => e.Base).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Height).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.SideA).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.SideB).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.SideC).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Area).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Circumference).HasColumnType("decimal(18,2)");
+            });
+        }
     }
 
 }

@@ -8,6 +8,6 @@ namespace Services.Calculator.Interfaces
 {
     public interface IOperationStrategy
     {
-        decimal Execute(decimal a, decimal b = 0);
+        decimal Execute(decimal a, decimal? b);
     }
 }

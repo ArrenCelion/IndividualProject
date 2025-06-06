@@ -47,12 +47,12 @@ namespace Services.Calculator
 
             var result = operatorChoice switch
             {
-                "+" => _additionStrategy.Execute(number1, number2 ?? 0),
-                "-" => _subtractionStrategy.Execute(number1, number2 ?? 0),
-                "*" => _multiplicationStrategy.Execute(number1, number2 ?? 0),
-                "/" => _divisionStrategy.Execute(number1, number2 ?? 0),
-                "%" => _modulusStrategy.Execute(number1, number2 ?? 0),
-                "√" => _squareRootStrategy.Execute(number1),
+                "+" => _additionStrategy.Execute(number1, number2),
+                "-" => _subtractionStrategy.Execute(number1, number2),
+                "*" => _multiplicationStrategy.Execute(number1, number2),
+                "/" => _divisionStrategy.Execute(number1, number2),
+                "%" => _modulusStrategy.Execute(number1, number2),
+                "√" => _squareRootStrategy.Execute(number1, number2),
                 _ => throw new InvalidOperationException("Invalid operator")
             };
 
@@ -60,7 +60,7 @@ namespace Services.Calculator
             {
                 Operator = operatorChoice,
                 Number1 = number1,
-                Number2 = number2 ?? 0,
+                Number2 = number2,
                 Result = result,
                 DateOfCalculation = DateTime.Now
             };
@@ -86,6 +86,17 @@ namespace Services.Calculator
                 _dbContext.CalculatorModels.Add(calculatorModel);
             }
             _dbContext.SaveChanges();
+        }
+
+        public void ReadAllCalculations()
+        {
+            var calculations = GetAllCalculations();
+            _displayCRUD.DisplayReadCalculations(calculations);
+        }
+
+        public List<CalculatorModel> GetAllCalculations()
+        {
+            return _dbContext.CalculatorModels.ToList();
         }
     }
 }

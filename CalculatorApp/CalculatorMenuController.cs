@@ -34,7 +34,7 @@ namespace CalculatorApp
                         _calculatorService.StartCalculation();
                         break;
                     case "Read all":
-                        //_displayCRUD.ReadAllCalculations();
+                        _calculatorService.ReadAllCalculations();
                         break;
                     case "Edit":
                         //_displayCRUD.UpdateCalculation();

@@ -9,7 +9,7 @@ namespace Services.Calculator.Strategies
 {
     public class SquareRootStrategy : IOperationStrategy
     {
-        public decimal Execute(decimal a, decimal b = 0)
+        public decimal Execute(decimal a, decimal? b)
         {
             if (a < 0) throw new ArgumentException("Cannot calculate square root of a negative number.");
             return (decimal)Math.Sqrt((double)a);

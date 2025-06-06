@@ -9,9 +9,9 @@ namespace Services.Calculator.Strategies
 {
     public class MultiplicationStrategy : IOperationStrategy
     {
-        public decimal Execute(decimal a, decimal b = 0)
+        public decimal Execute(decimal a, decimal? b)
         {
-            return a * b;
+            return a * (decimal)b;
         }
     }
 }
